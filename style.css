@@ -386,11 +386,50 @@ header {
 }
 
 .question-text {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 500;
   color: var(--text);
   margin-bottom: 24px;
-  line-height: 1.75;
+  line-height: 1.8;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  padding: 20px 24px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.question-text .katex {
+  font-size: 1.2em;
+  color: #a78bfa;
+  padding: 0 4px;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 4px;
+}
+
+.question-text .katex-display {
+  margin: 16px 0;
+  padding: 16px;
+  background: rgba(6, 182, 212, 0.08);
+  border-radius: 12px;
+  border-left: 3px solid #06b6d4;
+  overflow-x: auto;
+}
+
+.question-text .katex-display .katex {
+  color: #22d3ee;
+  font-size: 1.1em;
+}
+
+.question-text em {
+  color: #f472b6;
+  font-style: normal;
+  background: rgba(244, 114, 182, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.question-text strong {
+  color: #fbbf24;
+  font-weight: 700;
 }
 
 .header-tools {
@@ -609,18 +648,67 @@ header {
   line-height: 1.8;
 }
 
-.solution-text strong { color: var(--text); }
+.solution-text strong { 
+  color: #fbbf24; 
+  font-weight: 700;
+}
+
+.solution-text em {
+  color: #f472b6;
+  font-style: normal;
+  background: rgba(244, 114, 182, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
 .solution-text br + br { display: block; margin-top: 8px; }
 
+.solution-text .katex {
+  font-size: 1.15em;
+  color: #a78bfa;
+  background: rgba(139, 92, 246, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.solution-text .katex-display {
+  margin: 16px 0;
+  padding: 18px 20px;
+  background: rgba(6, 182, 212, 0.08);
+  border-radius: 12px;
+  border-left: 3px solid #06b6d4;
+  overflow-x: auto;
+}
+
+.solution-text .katex-display .katex {
+  color: #22d3ee;
+  font-size: 1.1em;
+  background: transparent;
+  padding: 0;
+}
+
 /* ===== KATEX ===== */
-.katex { font-size: 1.1em !important; color: var(--primary-light); }
+.katex { 
+  font-size: 1.15em !important; 
+  color: #a78bfa; 
+  background: rgba(139, 92, 246, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
 .katex-display { 
-  background: rgba(0,0,0,0.25); 
-  padding: 16px 20px; 
+  background: rgba(6, 182, 212, 0.08); 
+  padding: 18px 24px; 
   border-radius: 12px;
   margin: 16px 0; 
-  border: 1px solid rgba(255,255,255,0.05);
+  border-left: 3px solid #06b6d4;
   overflow-x: auto;
+}
+
+.katex-display .katex {
+  color: #22d3ee;
+  font-size: 1.15em;
+  background: transparent;
+  padding: 0;
 }
 
 /* ===== ACTION BUTTONS ===== */
