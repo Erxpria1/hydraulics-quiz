@@ -61,7 +61,10 @@
     <div class="question-header">
       <span class="question-number" id="questionNumber"></span>
       <span class="question-exercise" id="questionExercise"></span>
-      <button class="hoporlor-btn" id="hoporlorBtn">🎧 HOPORLOR</button>
+      <div class="header-tools">
+        <button class="hoporlor-btn" id="hoporlorBtn">🎧 HOPORLOR</button>
+        <button class="calc-btn" id="calcBtn">🧮</button>
+      </div>
     </div>
     <div class="question-text" id="questionText"></div>
     <div class="question-image" id="questionImage"></div>
@@ -95,9 +98,45 @@
 
   <!-- Navigation -->
   <div class="navigation">
-    <button class="btn btn-prev" id="prevBtn" data-en="Previous" data-tr="Önceki">Previous</button>
+    <button class="btn btn-prev" id="prevBtn">← Önceki</button>
     <div class="question-dots" id="questionDots"></div>
-    <button class="btn btn-nav-next" id="nextNavBtn" data-en="Next" data-tr="Sonraki">Next</button>
+    <button class="btn btn-nav-next" id="nextNavBtn">Sonraki →</button>
+  </div>
+</div>
+
+<!-- Calculator Modal -->
+<div class="calc-modal" id="calcModal">
+  <div class="calc-container">
+    <div class="calc-header">
+      <span>Hesap Makinesi</span>
+      <button class="calc-close" id="calcClose">✕</button>
+    </div>
+    <input type="text" class="calc-display" id="calcDisplay" readonly>
+    <div class="calc-buttons">
+      <button class="calc-btn-num" data-val="7">7</button>
+      <button class="calc-btn-num" data-val="8">8</button>
+      <button class="calc-btn-num" data-val="9">9</button>
+      <button class="calc-btn-op" data-val="/">÷</button>
+      <button class="calc-btn-op" data-val="sqrt">√</button>
+      
+      <button class="calc-btn-num" data-val="4">4</button>
+      <button class="calc-btn-num" data-val="5">5</button>
+      <button class="calc-btn-num" data-val="6">6</button>
+      <button class="calc-btn-op" data-val="*">×</button>
+      <button class="calc-btn-op" data-val="^">x²</button>
+      
+      <button class="calc-btn-num" data-val="1">1</button>
+      <button class="calc-btn-num" data-val="2">2</button>
+      <button class="calc-btn-num" data-val="3">3</button>
+      <button class="calc-btn-op" data-val="-">−</button>
+      <button class="calc-btn-op" data-val="%">%</button>
+      
+      <button class="calc-btn-num" data-val="0">0</button>
+      <button class="calc-btn-num" data-val=".">.</button>
+      <button class="calc-btn-clear" id="calcClear">C</button>
+      <button class="calc-btn-op" data-val="+">+</button>
+      <button class="calc-btn-equals" id="calcEquals">=</button>
+    </div>
   </div>
 </div>
 

@@ -8,13 +8,13 @@ const questions = [
       tr: "MLT sisteminde kuvvetin boyutu aşağıdakilerden hangisidir?"
     },
     options: {
-      en: ["MLT⁻²", "MLT⁻¹", "MLT²", "ML²T⁻²"],
-      tr: ["MLT⁻²", "MLT⁻¹", "MLT²", "ML²T⁻²"]
+      en: ["$MLT^{-2}$", "MLT⁻¹", "MLT²", "ML²T⁻²"],
+      tr: ["$MLT^{-2}$", "MLT⁻¹", "MLT²", "ML²T⁻²"]
     },
     correct: 0,
     solution: {
-      en: "Force F = ma, so dimension is [M][L][T]⁻² = MLT⁻²",
-      tr: "Kuvvet F = ma, boyut [M][L][T]⁻² = MLT⁻²"
+      en: "Force F = ma, so dimension is [M][L][T]⁻² = $MLT^{-2}$",
+      tr: "Kuvvet F = ma, boyut [M][L][T]⁻² = $MLT^{-2}$"
     },
     narration: {
       tr: "Bu soruda, MLT sisteminde kuvvetin boyutunun ne olduğunu soruyor. Hatırlayalım, kuvvet kütlesi ile ivmenin çarpımına eşittir. Kütlenin boyutu M, uzunluğun boyutu L, zamanın boyutu T'dir. İvme de hızın zamana göre değişimi olduğuna göre, boyutları bir araya getirdiğimizde M L T üssü eksi iki elde ederiz. Yani doğru cevap birinci şık, M L T üssü eksi ikidir. Diğer şıklar incelendiğinde, ikinci şık hareket, üçüncü şık enerji, dördüncü şık ise iş olarak karşımıza çıkar."
@@ -313,8 +313,8 @@ const questions = [
       tr: "Kinematik viskozite ν boyutları nelerdir?"
     },
     options: {
-      en: ["L²T⁻¹", "LT⁻¹", "MLT⁻²", "ML²T⁻¹"],
-      tr: ["L²T⁻¹", "LT⁻¹", "MLT⁻²", "ML²T⁻¹"]
+      en: ["L²T⁻¹", "LT⁻¹", "$MLT^{-2}$", "ML²T⁻¹"],
+      tr: ["L²T⁻¹", "LT⁻¹", "$MLT^{-2}$", "ML²T⁻¹"]
     },
     correct: 0,
     solution: {

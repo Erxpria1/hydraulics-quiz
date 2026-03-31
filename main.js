@@ -461,4 +461,109 @@ if ('speechSynthesis' in window) {
   };
 }
 
+// Calculator
+const calcModal = document.getElementById('calcModal');
+const calcBtn = document.getElementById('calcBtn');
+const calcClose = document.getElementById('calcClose');
+const calcDisplay = document.getElementById('calcDisplay');
+const calcClear = document.getElementById('calcClear');
+const calcEquals = document.getElementById('calcEquals');
+
+let calcValue = '';
+let calcLastWasResult = false;
+
+if (calcBtn) {
+  calcBtn.addEventListener('click', () => {
+    calcModal.classList.add('active');
+    calcDisplay.focus();
+  });
+}
+
+if (calcClose) {
+  calcClose.addEventListener('click', () => {
+    calcModal.classList.remove('active');
+  });
+}
+
+if (calcModal) {
+  calcModal.addEventListener('click', (e) => {
+    if (e.target === calcModal) {
+      calcModal.classList.remove('active');
+    }
+  });
+}
+
+document.querySelectorAll('.calc-btn-num').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (calcLastWasResult && !isNaN(btn.dataset.val)) {
+      calcValue = '';
+      calcLastWasResult = false;
+    }
+    calcValue += btn.dataset.val;
+    calcDisplay.value = calcValue;
+  });
+});
+
+document.querySelectorAll('.calc-btn-op').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const op = btn.dataset.val;
+    if (calcValue === '' && calcDisplay.value !== '') {
+      calcValue = calcDisplay.value;
+    }
+    
+    if (op === 'sqrt') {
+      calcDisplay.value = Math.sqrt(parseFloat(calcValue));
+      calcValue = calcDisplay.value;
+      calcLastWasResult = true;
+    } else if (op === '^') {
+      calcDisplay.value = Math.pow(parseFloat(calcValue), 2);
+      calcValue = calcDisplay.value;
+      calcLastWasResult = true;
+    } else if (op === '%') {
+      calcDisplay.value = parseFloat(calcValue) / 100;
+      calcValue = calcDisplay.value;
+      calcLastWasResult = true;
+    } else {
+      calcValue += op;
+      calcDisplay.value = calcValue;
+      calcLastWasResult = false;
+    }
+  });
+});
+
+if (calcClear) {
+  calcClear.addEventListener('click', () => {
+    calcValue = '';
+    calcDisplay.value = '';
+    calcLastWasResult = false;
+  });
+}
+
+if (calcEquals) {
+  calcEquals.addEventListener('click', () => {
+    try {
+      let expression = calcValue;
+      expression = expression.replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-');
+      const result = eval(expression);
+      calcDisplay.value = result;
+      calcValue = result.toString();
+      calcLastWasResult = true;
+    } catch (e) {
+      calcDisplay.value = 'Error';
+      calcValue = '';
+    }
+  });
+}
+
+// Keyboard support for calculator
+if (calcModal) {
+  calcModal.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      calcEquals.click();
+    } else if (e.key === 'Escape') {
+      calcModal.classList.remove('active');
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', init);
