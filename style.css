@@ -1,4 +1,6 @@
 /* Hydraulics Quiz - Premium Modern CSS */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
 :root {
   --primary: #8b5cf6;
   --primary-dark: #7c3aed;
@@ -22,7 +24,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   background: var(--bg-dark);
   color: var(--text);
   min-height: 100vh;
@@ -386,6 +388,7 @@ header {
 }
 
 .question-text {
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   font-size: 1.15rem;
   font-weight: 500;
   color: var(--text);
@@ -403,6 +406,7 @@ header {
   padding: 0 4px;
   background: rgba(139, 92, 246, 0.1);
   border-radius: 4px;
+  font-family: 'Fira Code', 'JetBrains Mono', monospace;
 }
 
 .question-text .katex-display {
@@ -412,6 +416,7 @@ header {
   border-radius: 12px;
   border-left: 3px solid #06b6d4;
   overflow-x: auto;
+  font-family: 'Fira Code', 'JetBrains Mono', monospace;
 }
 
 .question-text .katex-display .katex {
@@ -643,6 +648,7 @@ header {
 .audio-btn:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(244, 63, 94, 0.5); }
 
 .solution-text {
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   font-size: 0.95rem;
   color: #cbd5e1;
   line-height: 1.8;
@@ -669,6 +675,7 @@ header {
   background: rgba(139, 92, 246, 0.1);
   padding: 2px 6px;
   border-radius: 4px;
+  font-family: 'Fira Code', 'JetBrains Mono', monospace;
 }
 
 .solution-text .katex-display {
@@ -678,6 +685,7 @@ header {
   border-radius: 12px;
   border-left: 3px solid #06b6d4;
   overflow-x: auto;
+  font-family: 'Fira Code', 'JetBrains Mono', monospace;
 }
 
 .solution-text .katex-display .katex {
@@ -694,6 +702,7 @@ header {
   background: rgba(139, 92, 246, 0.1);
   padding: 2px 6px;
   border-radius: 4px;
+  font-family: 'Fira Code', 'JetBrains Mono', monospace;
 }
 .katex-display { 
   background: rgba(6, 182, 212, 0.08); 
@@ -702,6 +711,7 @@ header {
   margin: 16px 0; 
   border-left: 3px solid #06b6d4;
   overflow-x: auto;
+  font-family: 'Fira Code', 'JetBrains Mono', monospace;
 }
 
 .katex-display .katex {
