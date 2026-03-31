@@ -342,10 +342,10 @@ function speakQuestion() {
   
   stopSpeaking();
   
-  const questionText = question.question[state.currentLang] || question.question.en;
-  const narrative = generateQuestionNarrative(question, questionText);
+  const solutionText = question.solution[state.currentLang] || question.solution.en;
+  const narrative = generateSolutionNarrative(question, solutionText);
   
-  speak(narrative);
+  speak(narrative, 'tr');
 }
 
 function speakSolution() {
@@ -358,7 +358,7 @@ function speakSolution() {
   const solutionText = question.solution[state.currentLang] || question.solution.en;
   const narrative = generateSolutionNarrative(question, solutionText);
   
-  speak(narrative);
+  speak(narrative, 'tr');
 }
 
 function generateQuestionNarrative(question, questionText) {
@@ -417,27 +417,26 @@ function generateSolutionNarrative(question, solutionText) {
   return narrative;
 }
 
-function speak(text) {
+function speak(text, lang = 'tr') {
   if (!('speechSynthesis' in window)) {
-    alert(state.currentLang === 'tr' ? 'Tarayıcınız konuşma özelliklerini desteklemiyor.' : 'Your browser does not support speech synthesis.');
+    alert('Tarayıcınız konuşma özelliklerini desteklemiyor.');
     return;
   }
   
+  stopSpeaking();
+  
   const utterance = new SpeechSynthesisUtterance(text);
   
-  utterance.lang = state.currentLang === 'tr' ? 'tr-TR' : 'en-US';
-  utterance.rate = 0.9;
+  utterance.lang = 'tr-TR';
+  utterance.rate = 0.85;
   utterance.pitch = 1;
   utterance.volume = 1;
   
   const voices = window.speechSynthesis.getVoices();
   const turkishVoice = voices.find(v => v.lang.startsWith('tr'));
-  const englishVoice = voices.find(v => v.lang.startsWith('en'));
   
-  if (state.currentLang === 'tr' && turkishVoice) {
+  if (turkishVoice) {
     utterance.voice = turkishVoice;
-  } else if (state.currentLang === 'en' && englishVoice) {
-    utterance.voice = englishVoice;
   }
   
   utterance.onstart = () => {
