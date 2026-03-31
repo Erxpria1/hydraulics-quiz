@@ -6,6 +6,9 @@ const state = {
   currentLang: 'en',
   showSolutions: false,
   speakingType: null,
+  currentAudio: null,
+  isPlaying: false,
+  useLocalAudio: true,
 };
 
 const elements = {
@@ -192,10 +195,46 @@ function toggleSolution() {
   }
 }
 
-// TTS MANTIĞI - DAİMA TÜRKÇE
+// AUDIO MANTIĞI - Local MP3 Dosyaları veya Fallback TTS
 let isPaused = false;
 
+function playLocalAudio(audioPath, type) {
+  if (state.currentAudio) {
+    state.currentAudio.pause();
+    state.currentAudio = null;
+  }
+  
+  state.currentAudio = new Audio(audioPath);
+  state.speakingType = type;
+  state.isPlaying = true;
+  
+  state.currentAudio.onplay = () => updateAudioButtons();
+  state.currentAudio.onpause = () => { isPaused = true; updateAudioButtons(); };
+  state.currentAudio.onended = () => { 
+    state.speakingType = null; 
+    state.isPlaying = false; 
+    isPaused = false; 
+    state.currentAudio = null;
+    updateAudioButtons(); 
+  };
+  
+  state.currentAudio.play().catch(err => {
+    console.warn('Audio playback failed:', err);
+    state.useLocalAudio = false;
+    handleSpeak(getCurrentText(type), type);
+  });
+}
+
 function handleSpeak(text, type) {
+  if (state.useLocalAudio) {
+    const q = getFilteredQuestions()[state.currentQuestion];
+    const audioType = type === 'question' ? 'narration' : 'solution';
+    const audioPath = `audio/q${q.id}_${audioType}.mp3`;
+    
+    playLocalAudio(audioPath, type);
+    return;
+  }
+  
   const synth = window.speechSynthesis;
 
   if (synth.speaking && state.speakingType === type) {
@@ -210,7 +249,7 @@ function handleSpeak(text, type) {
   isPaused = false;
 
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'tr-TR'; // DAİMA TÜRKÇE
+  utterance.lang = 'tr-TR';
   utterance.rate = 0.95;
   
   const voices = synth.getVoices();
@@ -225,9 +264,23 @@ function handleSpeak(text, type) {
   synth.speak(utterance);
 }
 
+function getCurrentText(type) {
+  const q = getFilteredQuestions()[state.currentQuestion];
+  if (type === 'question') {
+    return q.narration?.tr || q.question.tr;
+  } else {
+    return q.solution.tr || q.solution.en;
+  }
+}
+
 function stopSpeaking() {
+  if (state.currentAudio) {
+    state.currentAudio.pause();
+    state.currentAudio = null;
+  }
   window.speechSynthesis.cancel();
   state.speakingType = null;
+  state.isPlaying = false;
   isPaused = false;
   updateAudioButtons();
 }
@@ -235,7 +288,11 @@ function stopSpeaking() {
 function updateAudioButtons() {
   if (elements.hoporlorBtn) {
     if (state.speakingType === 'question') {
-      elements.hoporlorBtn.textContent = isPaused ? (state.currentLang === 'tr' ? '▶ Devam' : '▶ Resume') : (state.currentLang === 'tr' ? '⏸ Dur' : '⏸ Pause');
+      if (state.useLocalAudio) {
+        elements.hoporlorBtn.textContent = state.isPlaying ? (state.currentLang === 'tr' ? '⏸ Dur' : '⏸ Pause') : (state.currentLang === 'tr' ? '▶ Devam' : '▶ Resume');
+      } else {
+        elements.hoporlorBtn.textContent = isPaused ? (state.currentLang === 'tr' ? '▶ Devam' : '▶ Resume') : (state.currentLang === 'tr' ? '⏸ Dur' : '⏸ Pause');
+      }
       elements.hoporlorBtn.classList.toggle('playing', !isPaused);
     } else {
       elements.hoporlorBtn.textContent = state.currentLang === 'tr' ? '🎧 Dinle' : '🎧 Listen';

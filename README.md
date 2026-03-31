@@ -2,20 +2,22 @@
 
 PDF kaynaklı, interaktif hidrolik mühendisliği quiz uygulaması.
 
-## Kaynak
+## Kaynaklar
 
-**Exercise 1 PDF:** Steel ball weighing in oil - density calculation
-**Exercise 2 PDF:** Steel ball terminal velocity in oil
+**Exercise 1:** Steel ball density calculation (1 soru)
+**Exercise 2:** Terminal velocity in oil (1 soru)
+**Exercise 3:** Stokes & Newton Laws (10 soru)
 
 ## Özellikler
 
-- **2 Soru** - PDF'lerden eksiksiz
+- **12 Soru** - PDF'lerden eksiksiz
 - **Çift Dil** - İngilizce / Türkçe
-- **TTS** - Soru ve çözümlerin Türkçe sesli okunması
+- **TTS Ses** - Soru ve çözümlerin Türkçe sesli okunması (Google TTS)
 - **KaTeX** - Matematik formüllerin güzel renderlanması
 - **Hesap Makinesi** - Sürüklenebilir, bilimsel hesap makinesi
 - **Yıldızlama** - Önemli soruları kaydet
 - **Glass Effect** - Modern cam efektli tasarım
+- **Responsive** - Mobil uyumlu tasarım
 
 ## Sorular
 
@@ -25,16 +27,27 @@ PDF kaynaklı, interaktif hidrolik mühendisliği quiz uygulaması.
 ### Exercise II: Terminal Hız
 Çelik kürenin yağdaki terminal (düşme) hızının hesabı.
 
+### Exercise III: Stokes & Newton
+- Stokes Yasası (küçük küreler)
+- Newton Yasası (büyük küreler)
+- Reynolds sayısı hesabı
+- Sürükleme kuvveti hesabı
+
 ## Teknolojiler
 
 - Vanilla JavaScript
 - KaTeX (LaTeX math rendering)
-- Web Speech API (TTS)
+- HTML5 Audio API + gTTS
 - CSS Glass Morphism
 
-## Demo
+## Ses Dosyaları Oluşturma
 
-Canlı demo: [hydraulics-quiz.vercel.app](https://hydraulics-quiz.vercel.app)
+```bash
+uv venv .venv
+source .venv/bin/activate
+uv pip install gtts requests
+python generate_audio.py
+```
 
 ## Lisans
 
