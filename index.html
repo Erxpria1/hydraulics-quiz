@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CE6301 Hydraulics Quiz</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <!-- Header -->
+  <header id="header">
+    <div class="header-left">
+      <h1>CE6301 Hydraulics</h1>
+      <span class="subtitle" data-en="Exercise Quiz 1-2-3" data-tr="Sorular 1-2-3">Exercise Quiz 1-2-3</span>
+    </div>
+    <div class="header-right">
+      <div class="lang-toggle" id="langToggle">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="tr">TR</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+    <span class="progress-text" id="progressText"></span>
+  </div>
+
+  <!-- Score -->
+  <div class="score-bar">
+    <div class="score-item">
+      <span data-en="Score" data-tr="Skor">Score</span>: <span id="scoreDisplay">0</span> / <span id="totalDisplay">0</span>
+    </div>
+    <div class="score-item">
+      <span data-en="Correct" data-tr="Doğru">Correct</span>: <span id="correctCount">0</span>
+    </div>
+    <div class="score-item">
+      <span data-en="Wrong" data-tr="Yanlış">Wrong</span>: <span id="wrongCount">0</span>
+    </div>
+  </div>
+
+  <!-- Filter Tabs -->
+  <div class="filter-tabs">
+    <button class="filter-btn active" data-filter="all" data-en="All" data-tr="Tümü">All</button>
+    <button class="filter-btn" data-filter="ex1" data-en="Exercise I: Dimensional Analysis" data-tr="Sorun I: Boyutsal Analiz">Exercise I</button>
+    <button class="filter-btn" data-filter="ex2" data-en="Exercise II: Model Theory" data-tr="Sorun II: Model Teorisi">Exercise II</button>
+    <button class="filter-btn" data-filter="ex3" data-en="Exercise III: Closed Conduit" data-tr="Sorun III: Kapalı Boru">Exercise III</button>
+  </div>
+
+  <!-- Question Card -->
+  <div class="question-card" id="questionCard">
+    <div class="question-header">
+      <span class="question-number" id="questionNumber"></span>
+      <span class="question-exercise" id="questionExercise"></span>
+    </div>
+    <div class="question-text" id="questionText"></div>
+    <div class="question-image" id="questionImage"></div>
+
+    <!-- Options (for multiple choice) -->
+    <div class="options-container" id="optionsContainer"></div>
+
+    <!-- Numeric Answer -->
+    <div class="numeric-answer" id="numericAnswer" style="display:none;">
+      <label data-en="Your Answer:" data-tr="Cevabınız:" for="numericInput">Your Answer:</label>
+      <input type="number" id="numericInput" step="any" placeholder="">
+      <span class="unit" id="unitDisplay"></span>
+      <button class="check-btn" id="checkNumeric" data-en="Check" data-tr="Kontrol Et">Check</button>
+    </div>
+
+    <!-- Solution -->
+    <div class="solution-container" id="solutionContainer" style="display:none;">
+      <div class="solution-header">
+        <span data-en="Solution" data-tr="Çözüm">Solution</span>
+      </div>
+      <div class="solution-text" id="solutionText"></div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button class="btn btn-show" id="showSolutionBtn" data-en="Show Solution" data-tr="Çözümü Göster">Show Solution</button>
+      <button class="btn btn-next" id="nextBtn" data-en="Next Question" data-tr="Sonraki Soru">Next Question</button>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="navigation">
+    <button class="btn btn-prev" id="prevBtn" data-en="Previous" data-tr="Önceki">Previous</button>
+    <div class="question-dots" id="questionDots"></div>
+    <button class="btn btn-nav-next" id="nextNavBtn" data-en="Next" data-tr="Sonraki">Next</button>
+  </div>
+</div>
+
+<script src="questions.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
