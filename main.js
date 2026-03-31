@@ -1,6 +1,7 @@
 const state = {
   currentQuestion: 0,
   answers: {},
+  starred: JSON.parse(localStorage.getItem('starredQuestions') || '[]'),
   score: 0,
   correct: 0,
   wrong: 0,
@@ -36,11 +37,13 @@ const elements = {
   langToggle: document.getElementById('langToggle'),
   hoporlorBtn: document.getElementById('hoporlorBtn'),
   audioBtn: document.getElementById('audioBtn'),
-  calcBtn: document.getElementById('calcBtn')
+  calcBtn: document.getElementById('calcBtn'),
+  starBtn: document.getElementById('starBtn')
 };
 
 function getFilteredQuestions() {
   if (state.filter === 'all') return questions;
+  if (state.filter === 'starred') return questions.filter(q => state.starred.includes(q.id));
   return questions.filter(q => q.exercise === state.filter);
 }
 
@@ -114,6 +117,7 @@ function renderQuestion() {
   elements.prevBtn.disabled = state.currentQuestion === 0;
   elements.nextNavBtn.disabled = state.currentQuestion === filtered.length - 1;
   
+  updateStarButton(question.id);
   updateStats();
   createDots();
   triggerKaTeX();
@@ -293,10 +297,45 @@ function updateFilterTabTexts() {
     const filter = btn.dataset.filter;
     const lang = state.currentLang;
     if (filter === 'all') btn.textContent = lang === 'tr' ? 'Tümü' : 'All';
+    else if (filter === 'starred') btn.textContent = lang === 'tr' ? '★ Yıldızlı' : '★ Starred';
     else if (filter === 'ex1') btn.textContent = lang === 'tr' ? 'Soru I: Boyutsal' : 'Ex I: Dimensional';
     else if (filter === 'ex2') btn.textContent = lang === 'tr' ? 'Soru II: Model' : 'Ex II: Model';
     else if (filter === 'ex3') btn.textContent = lang === 'tr' ? 'Soru III: Boru' : 'Ex III: Pipe';
   });
+}
+
+function updateStarButton(questionId) {
+  if (!elements.starBtn) return;
+  const isStarred = state.starred.includes(questionId);
+  elements.starBtn.textContent = isStarred ? '★' : '☆';
+  elements.starBtn.classList.toggle('starred', isStarred);
+}
+
+function toggleStar() {
+  const filtered = getFilteredQuestions();
+  const question = filtered[state.currentQuestion];
+  if (!question) return;
+  
+  const idx = state.starred.indexOf(question.id);
+  if (idx > -1) {
+    state.starred.splice(idx, 1);
+  } else {
+    state.starred.push(question.id);
+  }
+  
+  localStorage.setItem('starredQuestions', JSON.stringify(state.starred));
+  updateStarButton(question.id);
+  createDots();
+  
+  if (state.filter === 'starred' && state.starred.length === 0) {
+    state.currentQuestion = 0;
+  } else if (state.filter === 'starred') {
+    const newFiltered = getFilteredQuestions();
+    if (state.currentQuestion >= newFiltered.length) {
+      state.currentQuestion = newFiltered.length - 1;
+    }
+  }
+  renderQuestion();
 }
 
 function setupEventListeners() {
@@ -334,6 +373,9 @@ function setupEventListeners() {
       const text = q.solution.tr || q.solution.en;
       handleSpeak(text, 'solution');
     });
+  }
+  if (elements.starBtn) {
+    elements.starBtn.addEventListener('click', toggleStar);
   }
 }
 

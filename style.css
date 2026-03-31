@@ -613,6 +613,50 @@ header {
   box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
 }
 
+.star-btn {
+  width: 44px;
+  height: 44px;
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+  border: 2px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.star-btn:hover {
+  transform: scale(1.1);
+  background: rgba(251, 191, 36, 0.25);
+}
+
+.star-btn.starred {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #1e1b4b;
+  border-color: #fbbf24;
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+}
+
+.star-btn.starred:hover {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.dot.starred {
+  position: relative;
+}
+
+.dot.starred::after {
+  content: '★';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 10px;
+  color: #fbbf24;
+}
+
 /* Yaver Calculator - Floating */
 .yaver-calc {
   position: fixed;
