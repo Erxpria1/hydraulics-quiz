@@ -329,9 +329,10 @@ function toggleStar() {
 }
 
 function updateStarredCount() {
-  const countEl = document.getElementById('starredCount');
-  if (countEl) {
-    countEl.textContent = state.starred.length;
+  const badge = document.getElementById('headerStarBadge');
+  if (badge) {
+    badge.textContent = state.starred.length;
+    badge.style.display = state.starred.length > 0 ? 'flex' : 'none';
   }
 }
 
@@ -427,12 +428,12 @@ function setupEventListeners() {
     elements.starBtn.addEventListener('click', toggleStar);
   }
   
-  const starredModalBtn = document.getElementById('starredModalBtn');
+  const headerStarBtn = document.getElementById('headerStarBtn');
   const closeStarredModalBtn = document.getElementById('closeStarredModal');
   const starredModal = document.getElementById('starredModal');
   
-  if (starredModalBtn) {
-    starredModalBtn.addEventListener('click', openStarredModal);
+  if (headerStarBtn) {
+    headerStarBtn.addEventListener('click', openStarredModal);
   }
   if (closeStarredModalBtn) {
     closeStarredModalBtn.addEventListener('click', closeStarredModal);
