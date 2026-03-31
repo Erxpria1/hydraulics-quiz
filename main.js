@@ -421,7 +421,14 @@ function speak(text, lang = 'tr') {
     return;
   }
   
-  stopSpeaking();
+  if (window.speechSynthesis.speaking) {
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+    } else {
+      window.speechSynthesis.pause();
+    }
+    return;
+  }
   
   const utterance = new SpeechSynthesisUtterance(text);
   
@@ -447,6 +454,16 @@ function speak(text, lang = 'tr') {
     updateAudioButtons();
   };
   
+  utterance.onpause = () => {
+    state.isSpeaking = false;
+    updateAudioButtons();
+  };
+  
+  utterance.onresume = () => {
+    state.isSpeaking = true;
+    updateAudioButtons();
+  };
+  
   utterance.onerror = () => {
     state.isSpeaking = false;
     updateAudioButtons();
@@ -457,7 +474,7 @@ function speak(text, lang = 'tr') {
 }
 
 function stopSpeaking() {
-  if (window.speechSynthesis.speaking) {
+  if (window.speechSynthesis.speaking || window.speechSynthesis.paused) {
     window.speechSynthesis.cancel();
   }
   state.isSpeaking = false;
@@ -465,13 +482,17 @@ function stopSpeaking() {
 }
 
 function updateAudioButtons() {
-  const btnClass = state.isSpeaking ? 'add' : 'remove';
+  const isPlaying = window.speechSynthesis.speaking;
+  const isPaused = window.speechSynthesis.paused;
+  const showPause = isPlaying && !isPaused;
   
   if (elements.hoporlorBtn) {
-    elements.hoporlorBtn.classList[btnClass]('playing');
+    elements.hoporlorBtn.innerHTML = showPause ? '⏸ DURAKLAT' : '🎧 HOPORLOR';
+    elements.hoporlorBtn.classList.toggle('playing', isPlaying || isPaused);
   }
   if (elements.audioBtn) {
-    elements.audioBtn.classList[btnClass]('playing');
+    elements.audioBtn.innerHTML = showPause ? '⏸' : '🔊';
+    elements.audioBtn.classList.toggle('playing', isPlaying || isPaused);
   }
 }
 
