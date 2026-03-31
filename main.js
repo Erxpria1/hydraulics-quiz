@@ -43,7 +43,6 @@ const elements = {
 
 function getFilteredQuestions() {
   if (state.filter === 'all') return questions;
-  if (state.filter === 'starred') return questions.filter(q => state.starred.includes(q.id));
   return questions.filter(q => q.exercise === state.filter);
 }
 
@@ -297,7 +296,6 @@ function updateFilterTabTexts() {
     const filter = btn.dataset.filter;
     const lang = state.currentLang;
     if (filter === 'all') btn.textContent = lang === 'tr' ? 'Tümü' : 'All';
-    else if (filter === 'starred') btn.textContent = lang === 'tr' ? '★ Yıldızlı' : '★ Starred';
     else if (filter === 'ex1') btn.textContent = lang === 'tr' ? 'Soru I: Boyutsal' : 'Ex I: Dimensional';
     else if (filter === 'ex2') btn.textContent = lang === 'tr' ? 'Soru II: Model' : 'Ex II: Model';
     else if (filter === 'ex3') btn.textContent = lang === 'tr' ? 'Soru III: Boru' : 'Ex III: Pipe';
@@ -325,17 +323,68 @@ function toggleStar() {
   
   localStorage.setItem('starredQuestions', JSON.stringify(state.starred));
   updateStarButton(question.id);
+  updateStarredCount();
   createDots();
-  
-  if (state.filter === 'starred' && state.starred.length === 0) {
-    state.currentQuestion = 0;
-  } else if (state.filter === 'starred') {
-    const newFiltered = getFilteredQuestions();
-    if (state.currentQuestion >= newFiltered.length) {
-      state.currentQuestion = newFiltered.length - 1;
-    }
-  }
   renderQuestion();
+}
+
+function updateStarredCount() {
+  const countEl = document.getElementById('starredCount');
+  if (countEl) {
+    countEl.textContent = state.starred.length;
+  }
+}
+
+function openStarredModal() {
+  const modal = document.getElementById('starredModal');
+  const list = document.getElementById('starredList');
+  
+  if (!modal || !list) return;
+  
+  if (state.starred.length === 0) {
+    list.innerHTML = `<div class="starred-empty">Henüz yıldızlanmış soru yok.<br>☆ butonuna tıklayarak soru ekleyin.</div>`;
+  } else {
+    const starredQuestions = questions.filter(q => state.starred.includes(q.id));
+    list.innerHTML = starredQuestions.map(q => {
+      const lang = state.currentLang;
+      const text = q.question[lang] || q.question.en;
+      const shortText = text.length > 80 ? text.substring(0, 80) + '...' : text;
+      return `
+        <div class="starred-item" data-id="${q.id}">
+          <div class="starred-item-header">
+            <span class="starred-item-id">Q${q.id}</span>
+            <span class="starred-item-exercise">${getExerciseLabel(q.exercise)}</span>
+          </div>
+          <div class="starred-item-text">${shortText}</div>
+        </div>
+      `;
+    }).join('');
+    
+    list.querySelectorAll('.starred-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const id = parseInt(item.dataset.id);
+        const idx = questions.findIndex(q => q.id === id);
+        if (idx > -1) {
+          state.filter = 'all';
+          state.currentQuestion = idx;
+          document.querySelectorAll('.filter-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.filter === 'all');
+          });
+          closeStarredModal();
+          renderQuestion();
+        }
+      });
+    });
+  }
+  
+  modal.classList.add('active');
+}
+
+function closeStarredModal() {
+  const modal = document.getElementById('starredModal');
+  if (modal) {
+    modal.classList.remove('active');
+  }
 }
 
 function setupEventListeners() {
@@ -377,6 +426,24 @@ function setupEventListeners() {
   if (elements.starBtn) {
     elements.starBtn.addEventListener('click', toggleStar);
   }
+  
+  const starredModalBtn = document.getElementById('starredModalBtn');
+  const closeStarredModalBtn = document.getElementById('closeStarredModal');
+  const starredModal = document.getElementById('starredModal');
+  
+  if (starredModalBtn) {
+    starredModalBtn.addEventListener('click', openStarredModal);
+  }
+  if (closeStarredModalBtn) {
+    closeStarredModalBtn.addEventListener('click', closeStarredModal);
+  }
+  if (starredModal) {
+    starredModal.addEventListener('click', (e) => {
+      if (e.target === starredModal) closeStarredModal();
+    });
+  }
+  
+  updateStarredCount();
 }
 
 document.addEventListener('DOMContentLoaded', init);

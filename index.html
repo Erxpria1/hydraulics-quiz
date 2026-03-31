@@ -57,12 +57,25 @@
     <div class="score-item">
       <span data-en="Wrong" data-tr="Yanlış">Wrong</span>: <span id="wrongCount">0</span>
     </div>
+    <button class="starred-modal-btn" id="starredModalBtn">
+      <span>★</span> <span id="starredCount">0</span>
+    </button>
+  </div>
+
+  <!-- Starred Questions Modal -->
+  <div class="modal-overlay" id="starredModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>★ Yıldızlı Sorular</h3>
+        <button class="modal-close" id="closeStarredModal">✕</button>
+      </div>
+      <div class="modal-body" id="starredList"></div>
+    </div>
   </div>
 
   <!-- Filter Tabs -->
   <div class="filter-tabs">
     <button class="filter-btn active" data-filter="all" data-en="All" data-tr="Tümü">All</button>
-    <button class="filter-btn" data-filter="starred" data-en="★ Starred" data-tr="★ Yıldızlı">★ Yıldızlı</button>
     <button class="filter-btn" data-filter="ex1" data-en="Ex I: Dimensional" data-tr="Soru I: Boyutsal">Ex I: Dimensional</button>
     <button class="filter-btn" data-filter="ex2" data-en="Ex II: Model" data-tr="Soru II: Model">Ex II: Model</button>
     <button class="filter-btn" data-filter="ex3" data-en="Ex III: Pipe" data-tr="Soru III: Boru">Ex III: Pipe</button>

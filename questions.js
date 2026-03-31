@@ -8,8 +8,8 @@ const questions = [
       tr: "MLT sisteminde kuvvetin boyutu aşağıdakilerden hangisidir?"
     },
     options: {
-      en: ["$MLT^{-2}$", "MLT⁻¹", "MLT²", "ML²T⁻²"],
-      tr: ["$MLT^{-2}$", "MLT⁻¹", "MLT²", "ML²T⁻²"]
+      en: ["$MLT^{-2}$", "$MLT^{-1}$", "$MLT^2$", "$ML^2T^{-2}$"],
+      tr: ["$MLT^{-2}$", "$MLT^{-1}$", "$MLT^2$", "$ML^2T^{-2}$"]
     },
     correct: 0,
     solution: {
@@ -29,8 +29,8 @@ const questions = [
       tr: "Dinamik viskozitenin (μ) boyutsal formülü nedir?"
     },
     options: {
-      en: ["ML⁻¹T⁻¹", "MLT⁻¹", "ML²T⁻²", "ML⁻¹T⁻²"],
-      tr: ["ML⁻¹T⁻¹", "MLT⁻¹", "ML²T⁻²", "ML⁻¹T⁻²"]
+      en: ["$ML^{-1}T^{-1}$", "$MLT^{-1}$", "$ML^2T^{-2}$", "$ML^{-1}T^{-2}$"],
+      tr: ["$ML^{-1}T^{-1}$", "$MLT^{-1}$", "$ML^2T^{-2}$", "$ML^{-1}T^{-2}$"]
     },
     correct: 0,
     solution: {
@@ -275,8 +275,8 @@ const questions = [
       tr: "Borulardaki küçük kayıplar (minor losses) neden oluşur?"
     },
     options: {
-      en: ["Fittings, valves, bends, expansions", "Friction along pipe length", "Fluid viscosity", "Pipe material"],
-      tr: ["Fittingler, vanalar, dirsekler, genişlemeler", "Boru boyunca sürtünme", "Akışkan viskozitesi", "Boru malzemesi"]
+      en: ["Fittings, valves, bends, expansions/contractions", "Friction along pipe length", "Fluid viscosity", "Pipe material roughness"],
+      tr: ["Fittingler, vanalar, dirsekler, genişlemeler/daralmalar", "Boru boyunca sürtünme", "Akışkan viskozitesi", "Boru malzemesi pürüzlülüğü"]
     },
     correct: 0,
     solution: {
@@ -296,8 +296,8 @@ const questions = [
       tr: "Head loss için Darcy-Weisbach denklemi hangisidir?"
     },
     options: {
-      en: ["hf = f(L/D)(V²/2g)", "hf = f(LV²/Dg)", "hf = fLV²/D", "hf = fV²/2g"],
-      tr: ["hf = f(L/D)(V²/2g)", "hf = f(LV²/Dg)", "hf = fLV²/D", "hf = fV²/2g"]
+      en: ["$h_f = f \\frac{L}{D} \\frac{V^2}{2g}$", "$h_f = f \\frac{LV^2}{Dg}$", "$h_f = f \\frac{LV^2}{D}$", "$h_f = f \\frac{V^2}{2g}$"],
+      tr: ["$h_f = f \\frac{L}{D} \\frac{V^2}{2g}$", "$h_f = f \\frac{LV^2}{Dg}$", "$h_f = f \\frac{LV^2}{D}$", "$h_f = f \\frac{V^2}{2g}$"]
     },
     correct: 0,
     solution: {
@@ -317,8 +317,8 @@ const questions = [
       tr: "Kinematik viskozite ν boyutları nelerdir?"
     },
     options: {
-      en: ["L²T⁻¹", "LT⁻¹", "$MLT^{-2}$", "ML²T⁻¹"],
-      tr: ["L²T⁻¹", "LT⁻¹", "$MLT^{-2}$", "ML²T⁻¹"]
+      en: ["$L^2T^{-1}$", "$LT^{-1}$", "$MLT^{-2}$", "$ML^2T^{-1}$"],
+      tr: ["$L^2T^{-1}$", "$LT^{-1}$", "$MLT^{-2}$", "$ML^2T^{-1}$"]
     },
     correct: 0,
     solution: {
