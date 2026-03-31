@@ -6,7 +6,9 @@ const state = {
   wrong: 0,
   filter: 'all',
   currentLang: 'en',
-  showSolutions: false
+  showSolutions: false,
+  isSpeaking: false,
+  currentUtterance: null
 };
 
 const elements = {
@@ -32,7 +34,9 @@ const elements = {
   showSolutionBtn: document.getElementById('showSolutionBtn'),
   nextNavBtn: document.getElementById('nextNavBtn'),
   questionDots: document.getElementById('questionDots'),
-  langToggle: document.getElementById('langToggle')
+  langToggle: document.getElementById('langToggle'),
+  hoporlorBtn: document.getElementById('hoporlorBtn'),
+  audioBtn: document.getElementById('audioBtn')
 };
 
 function getFilteredQuestions() {
@@ -321,6 +325,163 @@ function setupEventListeners() {
       renderQuestion();
     });
   });
+  
+  if (elements.hoporlorBtn) {
+    elements.hoporlorBtn.addEventListener('click', speakQuestion);
+  }
+  
+  if (elements.audioBtn) {
+    elements.audioBtn.addEventListener('click', speakSolution);
+  }
+}
+
+function speakQuestion() {
+  const filtered = getFilteredQuestions();
+  const question = filtered[state.currentQuestion];
+  if (!question) return;
+  
+  stopSpeaking();
+  
+  const questionText = question.question[state.currentLang] || question.question.en;
+  const narrative = generateQuestionNarrative(question, questionText);
+  
+  speak(narrative);
+}
+
+function speakSolution() {
+  const filtered = getFilteredQuestions();
+  const question = filtered[state.currentQuestion];
+  if (!question || state.answers[question.id] === undefined) return;
+  
+  stopSpeaking();
+  
+  const solutionText = question.solution[state.currentLang] || question.solution.en;
+  const narrative = generateSolutionNarrative(question, solutionText);
+  
+  speak(narrative);
+}
+
+function generateQuestionNarrative(question, questionText) {
+  const lang = state.currentLang;
+  
+  let narrative = questionText + '. ';
+  
+  if (question.type === 'multiple') {
+    const options = question.options[lang] || question.options.en;
+    const labels = lang === 'tr' ? ['Birinci şık', 'İkinci şık', 'Üçüncü şık', 'Dördüncü şık'] : ['Option A', 'Option B', 'Option C', 'Option D'];
+    
+    narrative += lang === 'tr' ? 'Seçenekler: ' : 'Options: ';
+    options.forEach((opt, i) => {
+      narrative += labels[i] + ': ' + opt + '. ';
+    });
+  } else if (question.type === 'numeric') {
+    if (question.unit) {
+      narrative += lang === 'tr' ? `Cevabınızı ${question.unit} biriminde giriniz.` : `Enter your answer in ${question.unit}.`;
+    }
+  }
+  
+  return narrative;
+}
+
+function generateSolutionNarrative(question, solutionText) {
+  const lang = state.currentLang;
+  
+  let narrative = '';
+  
+  if (lang === 'tr') {
+    narrative = 'Bu sorunun çözümünü anlatıyorum. ';
+  } else {
+    narrative = 'I will explain the solution to this question. ';
+  }
+  
+  narrative += solutionText + '. ';
+  
+  if (question.type === 'multiple') {
+    const options = question.options[lang] || question.options.en;
+    const correctOption = options[question.correct];
+    const labels = lang === 'tr' ? ['birinci şık', 'ikinci şık', 'üçüncü şık', 'dördüncü şık'] : ['option A', 'option B', 'option C', 'option D'];
+    
+    if (lang === 'tr') {
+      narrative += `Doğru cevap ${labels[question.correct]} yani ${correctOption} seçeneğidir.`;
+    } else {
+      narrative += `The correct answer is ${labels[question.correct]}, which is ${correctOption}.`;
+    }
+  } else if (question.type === 'numeric') {
+    if (lang === 'tr') {
+      narrative += `Doğru cevap ${question.answer} ${question.unit || 'birim'}`;
+    } else {
+      narrative += `The correct answer is ${question.answer} ${question.unit || 'units'}`;
+    }
+  }
+  
+  return narrative;
+}
+
+function speak(text) {
+  if (!('speechSynthesis' in window)) {
+    alert(state.currentLang === 'tr' ? 'Tarayıcınız konuşma özelliklerini desteklemiyor.' : 'Your browser does not support speech synthesis.');
+    return;
+  }
+  
+  const utterance = new SpeechSynthesisUtterance(text);
+  
+  utterance.lang = state.currentLang === 'tr' ? 'tr-TR' : 'en-US';
+  utterance.rate = 0.9;
+  utterance.pitch = 1;
+  utterance.volume = 1;
+  
+  const voices = window.speechSynthesis.getVoices();
+  const turkishVoice = voices.find(v => v.lang.startsWith('tr'));
+  const englishVoice = voices.find(v => v.lang.startsWith('en'));
+  
+  if (state.currentLang === 'tr' && turkishVoice) {
+    utterance.voice = turkishVoice;
+  } else if (state.currentLang === 'en' && englishVoice) {
+    utterance.voice = englishVoice;
+  }
+  
+  utterance.onstart = () => {
+    state.isSpeaking = true;
+    updateAudioButtons();
+  };
+  
+  utterance.onend = () => {
+    state.isSpeaking = false;
+    updateAudioButtons();
+  };
+  
+  utterance.onerror = () => {
+    state.isSpeaking = false;
+    updateAudioButtons();
+  };
+  
+  state.currentUtterance = utterance;
+  window.speechSynthesis.speak(utterance);
+}
+
+function stopSpeaking() {
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+  }
+  state.isSpeaking = false;
+  updateAudioButtons();
+}
+
+function updateAudioButtons() {
+  const btnClass = state.isSpeaking ? 'add' : 'remove';
+  
+  if (elements.hoporlorBtn) {
+    elements.hoporlorBtn.classList[btnClass]('playing');
+  }
+  if (elements.audioBtn) {
+    elements.audioBtn.classList[btnClass]('playing');
+  }
+}
+
+if ('speechSynthesis' in window) {
+  window.speechSynthesis.onvoiceschanged = () => {
+    window.speechSynthesis.getVoices();
+  };
 }
 
 document.addEventListener('DOMContentLoaded', init);
