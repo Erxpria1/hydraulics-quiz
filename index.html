@@ -14,9 +14,9 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="app">
+<div id="app" role="main">
   <!-- Header -->
-  <header id="header">
+  <header id="header" role="banner">
     <div class="header-bg">
       <div class="header-gradient"></div>
       <div class="header-particles"></div>
@@ -68,15 +68,15 @@
   </div>
 
   <!-- Filter Tabs -->
-  <div class="filter-tabs">
-    <button class="filter-btn active" data-filter="all" data-en="All" data-tr="Tümü">All</button>
-    <button class="filter-btn" data-filter="ex1" data-en="Exercise 1" data-tr="Egzersiz 1">Exercise 1</button>
-    <button class="filter-btn" data-filter="ex2" data-en="Exercise 2" data-tr="Egzersiz 2">Exercise 2</button>
-    <button class="filter-btn" data-filter="ex3" data-en="Exercise 3" data-tr="Egzersiz 3">Exercise 3</button>
-  </div>
+  <nav class="filter-tabs" role="tablist" aria-label="Exercise filter">
+    <button class="filter-btn active" data-filter="all" data-en="All" data-tr="Tümü" role="tab" aria-selected="true">All</button>
+    <button class="filter-btn" data-filter="ex1" data-en="Exercise 1" data-tr="Egzersiz 1" role="tab" aria-selected="false">Exercise 1</button>
+    <button class="filter-btn" data-filter="ex2" data-en="Exercise 2" data-tr="Egzersiz 2" role="tab" aria-selected="false">Exercise 2</button>
+    <button class="filter-btn" data-filter="ex3" data-en="Exercise 3" data-tr="Egzersiz 3" role="tab" aria-selected="false">Exercise 3</button>
+  </nav>
 
   <!-- Question Card -->
-  <div class="question-card" id="questionCard">
+  <div class="question-card" id="questionCard" role="region" aria-live="polite" aria-label="Question 1">
     <div class="question-header">
       <span class="question-number" id="questionNumber"></span>
       <span class="question-exercise" id="questionExercise"></span>

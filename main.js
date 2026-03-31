@@ -9,6 +9,12 @@ const state = {
   currentAudio: null,
   isPlaying: false,
   useLocalAudio: true,
+  isAnimating: false,
+  swipeStartX: 0,
+  swipeStartY: 0,
+  isSwiping: false,
+  keyboardHintVisible: false,
+  keyboardHintTimeout: null,
 };
 
 const elements = {
@@ -34,7 +40,8 @@ const elements = {
   hoporlorBtn: document.getElementById('hoporlorBtn'),
   audioBtn: document.getElementById('audioBtn'),
   calcBtn: document.getElementById('calcBtn'),
-  starBtn: document.getElementById('starBtn')
+  starBtn: document.getElementById('starBtn'),
+  questionCard: document.getElementById('questionCard'),
 };
 
 function getFilteredQuestions() {
@@ -43,9 +50,150 @@ function getFilteredQuestions() {
 }
 
 function init() {
+  addSkipLink();
+  addToastContainer();
+  addKeyboardHint();
+  addSwipeIndicators();
   createDots();
-  renderQuestion();
+  renderQuestion(true);
   setupEventListeners();
+  setupSwipeGestures();
+  setupKeyboardShortcuts();
+  showKeyboardHint();
+}
+
+function addSkipLink() {
+  const skipLink = document.createElement('a');
+  skipLink.href = '#questionCard';
+  skipLink.className = 'skip-link';
+  skipLink.textContent = state.currentLang === 'tr' ? 'Ana içeriğe atla' : 'Skip to main content';
+  skipLink.setAttribute('aria-label', state.currentLang === 'tr' ? 'Ana içeriğe atla' : 'Skip to main content');
+  document.body.prepend(skipLink);
+}
+
+function addToastContainer() {
+  if (!document.getElementById('toastContainer')) {
+    const container = document.createElement('div');
+    container.id = 'toastContainer';
+    container.className = 'toast-container';
+    container.setAttribute('aria-live', 'polite');
+    document.body.appendChild(container);
+  }
+}
+
+function addKeyboardHint() {
+  if (!document.getElementById('keyboardHint')) {
+    const hint = document.createElement('div');
+    hint.id = 'keyboardHint';
+    hint.className = 'keyboard-hint';
+    hint.setAttribute('aria-hidden', 'true');
+    hint.innerHTML = `
+      <kbd><span>←</span> ${state.currentLang === 'tr' ? 'Önceki' : 'Previous'}</kbd>
+      <kbd><span>→</span> ${state.currentLang === 'tr' ? 'Sonraki' : 'Next'}</kbd>
+      <kbd><span>S</span> ${state.currentLang === 'tr' ? 'Çözüm' : 'Solution'}</kbd>
+      <kbd><span>?</span> ${state.currentLang === 'tr' ? 'Yardım' : 'Help'}</kbd>
+    `;
+    document.body.appendChild(hint);
+  }
+}
+
+function addSwipeIndicators() {
+  const card = elements.questionCard;
+  if (!card) return;
+  ['left', 'right'].forEach(dir => {
+    if (!card.querySelector(`.swipe-indicator.${dir}`)) {
+      const indicator = document.createElement('div');
+      indicator.className = `swipe-indicator ${dir}`;
+      indicator.textContent = dir === 'left' ? '←' : '→';
+      indicator.setAttribute('aria-hidden', 'true');
+      card.appendChild(indicator);
+    }
+  });
+}
+
+function showKeyboardHint() {
+  const hint = document.getElementById('keyboardHint');
+  if (!hint) return;
+  state.keyboardHintVisible = true;
+  hint.classList.add('visible');
+  clearTimeout(state.keyboardHintTimeout);
+  state.keyboardHintTimeout = setTimeout(() => {
+    hint.classList.remove('visible');
+    state.keyboardHintVisible = false;
+  }, 5000);
+}
+
+function toggleKeyboardHint() {
+  const hint = document.getElementById('keyboardHint');
+  if (!hint) return;
+  if (state.keyboardHintVisible) {
+    hint.classList.remove('visible');
+    state.keyboardHintVisible = false;
+  } else {
+    hint.classList.add('visible');
+    state.keyboardHintVisible = true;
+    clearTimeout(state.keyboardHintTimeout);
+    state.keyboardHintTimeout = setTimeout(() => {
+      hint.classList.remove('visible');
+      state.keyboardHintVisible = false;
+    }, 5000);
+  }
+}
+
+function showToast(message, type = 'info') {
+  const container = document.getElementById('toastContainer');
+  if (!container) return;
+
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.setAttribute('role', 'alert');
+
+  const icons = { correct: '✓', wrong: '✗', info: 'ℹ' };
+  toast.innerHTML = `<span class="toast-icon">${icons[type] || icons.info}</span><span>${message}</span>`;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add('toast-exit');
+    toast.addEventListener('animationend', () => toast.remove());
+  }, 3000);
+}
+
+function showConfetti() {
+  const container = document.createElement('div');
+  container.className = 'confetti-container';
+  document.body.appendChild(container);
+
+  const colors = ['#8b5cf6', '#10b981', '#f43f5e', '#fbbf24', '#06b6d4', '#f97316'];
+  const shapes = ['circle', 'square', 'triangle'];
+
+  for (let i = 0; i < 80; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const shape = shapes[Math.floor(Math.random() * shapes.length)];
+
+    confetti.style.left = `${Math.random() * 100}%`;
+    confetti.style.backgroundColor = color;
+    confetti.style.animationDuration = `${2 + Math.random() * 3}s`;
+    confetti.style.animationDelay = `${Math.random() * 2}s`;
+    confetti.style.width = `${6 + Math.random() * 8}px`;
+    confetti.style.height = confetti.style.width;
+
+    if (shape === 'circle') confetti.style.borderRadius = '50%';
+    else if (shape === 'triangle') {
+      confetti.style.backgroundColor = 'transparent';
+      confetti.style.width = '0';
+      confetti.style.height = '0';
+      confetti.style.borderLeft = '6px solid transparent';
+      confetti.style.borderRight = '6px solid transparent';
+      confetti.style.borderBottom = `12px solid ${color}`;
+    }
+
+    container.appendChild(confetti);
+  }
+
+  setTimeout(() => container.remove(), 6000);
 }
 
 function createDots() {
@@ -54,10 +202,20 @@ function createDots() {
   filtered.forEach((q, index) => {
     const dot = document.createElement('div');
     dot.className = 'dot';
+    dot.setAttribute('role', 'button');
+    dot.setAttribute('aria-label', `${state.currentLang === 'tr' ? 'Soru' : 'Question'} ${index + 1}`);
+    dot.setAttribute('tabindex', '0');
     if (state.answers[q.id]?.correct) dot.classList.add('correct');
     else if (state.answers[q.id]?.correct === false) dot.classList.add('wrong');
     if (index === state.currentQuestion) dot.classList.add('active');
     dot.addEventListener('click', () => { stopSpeaking(); goToQuestion(index); });
+    dot.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        stopSpeaking();
+        goToQuestion(index);
+      }
+    });
     elements.questionDots.appendChild(dot);
   });
 }
@@ -76,7 +234,7 @@ function triggerKaTeX(element = document.body) {
   }
 }
 
-function renderQuestion() {
+function renderQuestion(skipAnimation = false) {
   const filtered = getFilteredQuestions();
   const question = filtered[state.currentQuestion];
   if (!question) return;
@@ -117,6 +275,38 @@ function renderQuestion() {
   triggerKaTeX();
   updateButtonTexts();
   updateFilterTabTexts();
+
+  elements.questionCard.setAttribute('aria-label', `${state.currentLang === 'tr' ? 'Soru' : 'Question'} ${state.currentQuestion + 1}`);
+
+  const allAnswered = filtered.length > 0 && filtered.every(q => state.answers[q.id]?.correct);
+  if (allAnswered && filtered.length > 1) {
+    showConfetti();
+    showToast(
+      state.currentLang === 'tr' ? 'Tüm soruları doğru bildiniz! 🎉' : 'All questions correct! 🎉',
+      'correct'
+    );
+  }
+}
+
+function animateQuestion(direction, callback) {
+  if (state.isAnimating) return;
+  state.isAnimating = true;
+  const card = elements.questionCard;
+  const exitClass = direction === 'next' ? 'slide-left-exit' : 'slide-right-exit';
+  const enterClass = direction === 'next' ? 'slide-left-enter' : 'slide-right-enter';
+
+  card.classList.add(exitClass);
+
+  setTimeout(() => {
+    card.classList.remove(exitClass);
+    callback();
+    card.classList.add(enterClass);
+
+    card.addEventListener('animationend', () => {
+      card.classList.remove(enterClass);
+      state.isAnimating = false;
+    }, { once: true });
+  }, 250);
 }
 
 function renderMultipleChoice(question) {
@@ -126,13 +316,30 @@ function renderMultipleChoice(question) {
   options.forEach((option, index) => {
     const btn = document.createElement('button');
     btn.className = 'option-btn';
+    btn.setAttribute('role', 'radio');
+    btn.setAttribute('aria-checked', 'false');
     if (isAnswered) {
       btn.classList.add('disabled');
-      if (index === question.correct) btn.classList.add('correct');
-      else if (index === state.answers[question.id].selected) btn.classList.add('wrong');
+      btn.setAttribute('aria-disabled', 'true');
+      if (index === question.correct) {
+        btn.classList.add('correct');
+        btn.setAttribute('aria-checked', 'true');
+      }
+      else if (index === state.answers[question.id].selected) {
+        btn.classList.add('wrong');
+        btn.setAttribute('aria-checked', 'true');
+      }
     }
     btn.innerHTML = `<span class="option-label">${String.fromCharCode(65 + index)}</span><span class="option-text">${formatContent(option)}</span>`;
-    if (!isAnswered) btn.addEventListener('click', () => selectAnswer(index));
+    if (!isAnswered) {
+      btn.addEventListener('click', () => selectAnswer(index));
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          selectAnswer(index);
+        }
+      });
+    }
     elements.optionsContainer.appendChild(btn);
   });
 }
@@ -142,6 +349,7 @@ function renderNumeric(question) {
   elements.unitDisplay.textContent = question.unit || '';
   elements.numericInput.value = '';
   elements.numericInput.focus();
+  elements.numericInput.setAttribute('aria-label', state.currentLang === 'tr' ? 'Cevabınızı girin' : 'Enter your answer');
   
   elements.numericInput.onkeydown = (e) => {
     if (e.key === 'Enter') checkNumericAnswer();
@@ -155,7 +363,10 @@ function checkNumericAnswer() {
   if (state.answers[q.id]) return;
   
   const userAnswer = parseFloat(elements.numericInput.value);
-  if (isNaN(userAnswer)) return;
+  if (isNaN(userAnswer)) {
+    showToast(state.currentLang === 'tr' ? 'Lütfen geçerli bir sayı girin' : 'Please enter a valid number', 'info');
+    return;
+  }
   
   const tolerance = q.tolerance || 0.01;
   const correctAnswer = q.answer;
@@ -163,12 +374,13 @@ function checkNumericAnswer() {
   
   state.answers[q.id] = { selected: userAnswer, correct: isCorrect };
   
-  const label = document.querySelector('label[for="numericInput"]');
-  if (label) {
-    label.style.color = isCorrect ? 'var(--correct)' : 'var(--wrong)';
-    label.textContent = isCorrect 
-      ? (state.currentLang === 'tr' ? '✓ Doğru!' : '✓ Correct!')
-      : (state.currentLang === 'tr' ? `✗ Doğru cevap: ${correctAnswer}` : `✗ Correct answer: ${correctAnswer}`);
+  if (isCorrect) {
+    showToast(state.currentLang === 'tr' ? 'Doğru! Harika iş!' : 'Correct! Great job!', 'correct');
+  } else {
+    showToast(
+      state.currentLang === 'tr' ? `Yanlış! Doğru cevap: ${correctAnswer}` : `Wrong! Correct answer: ${correctAnswer}`,
+      'wrong'
+    );
   }
   
   renderQuestion();
@@ -195,7 +407,6 @@ function toggleSolution() {
   }
 }
 
-// AUDIO MANTIĞI - Local MP3 Dosyaları veya Fallback TTS
 let isPaused = false;
 
 function playLocalAudio(audioPath, type) {
@@ -313,18 +524,53 @@ function updateAudioButtons() {
   }
 }
 
-// Diğer standart fonksiyonlar (next, prev, stats vb.)
 function selectAnswer(index) {
   const q = getFilteredQuestions()[state.currentQuestion];
   if (state.answers[q.id]) return;
   const isCorrect = index === q.correct;
   state.answers[q.id] = { selected: index, correct: isCorrect };
+  
+  if (isCorrect) {
+    showToast(state.currentLang === 'tr' ? 'Doğru! Harika iş!' : 'Correct! Great job!', 'correct');
+  } else {
+    showToast(
+      state.currentLang === 'tr' ? `Yanlış! Doğru cevap: ${q.options[state.currentLang][q.correct]}` : `Wrong! Correct: ${q.options.en[q.correct]}`,
+      'wrong'
+    );
+  }
+  
   renderQuestion();
 }
 
-function nextQuestion() { stopSpeaking(); if (state.currentQuestion < getFilteredQuestions().length - 1) { state.currentQuestion++; renderQuestion(); } }
-function prevQuestion() { stopSpeaking(); if (state.currentQuestion > 0) { state.currentQuestion--; renderQuestion(); } }
-function goToQuestion(index) { state.currentQuestion = index; renderQuestion(); }
+function nextQuestion() {
+  stopSpeaking();
+  const filtered = getFilteredQuestions();
+  if (state.currentQuestion < filtered.length - 1) {
+    animateQuestion('next', () => {
+      state.currentQuestion++;
+      renderQuestion();
+    });
+  }
+}
+
+function prevQuestion() {
+  stopSpeaking();
+  if (state.currentQuestion > 0) {
+    animateQuestion('prev', () => {
+      state.currentQuestion--;
+      renderQuestion();
+    });
+  }
+}
+
+function goToQuestion(index) {
+  const direction = index > state.currentQuestion ? 'next' : 'prev';
+  animateQuestion(direction, () => {
+    state.currentQuestion = index;
+    renderQuestion();
+  });
+}
+
 function getExerciseLabel(ex) { 
   const labels = { 
     ex1: 'Exercise 1',
@@ -356,6 +602,10 @@ function updateStarButton(questionId) {
   const isStarred = state.starred.includes(questionId);
   elements.starBtn.textContent = isStarred ? '★' : '☆';
   elements.starBtn.classList.toggle('starred', isStarred);
+  elements.starBtn.setAttribute('aria-label', isStarred 
+    ? (state.currentLang === 'tr' ? 'Yıldızı kaldır' : 'Remove star')
+    : (state.currentLang === 'tr' ? 'Yıldızla' : 'Star question')
+  );
 }
 
 function toggleStar() {
@@ -366,8 +616,10 @@ function toggleStar() {
   const idx = state.starred.indexOf(question.id);
   if (idx > -1) {
     state.starred.splice(idx, 1);
+    showToast(state.currentLang === 'tr' ? 'Yıldız kaldırıldı' : 'Star removed', 'info');
   } else {
     state.starred.push(question.id);
+    showToast(state.currentLang === 'tr' ? 'Yıldız eklendi ★' : 'Star added ★', 'info');
   }
   
   localStorage.setItem('starredQuestions', JSON.stringify(state.starred));
@@ -392,7 +644,7 @@ function openStarredModal() {
   if (!modal || !list) return;
   
   if (state.starred.length === 0) {
-    list.innerHTML = `<div class="starred-empty">Henüz yıldızlanmış soru yok.<br>☆ butonuna tıklayarak soru ekleyin.</div>`;
+    list.innerHTML = `<div class="starred-empty">${state.currentLang === 'tr' ? 'Henüz yıldızlanmış soru yok.<br>☆ butonuna tıklayarak soru ekleyin.' : 'No starred questions yet.<br>Click the ☆ button to add questions.'}</div>`;
   } else {
     const starredQuestions = questions.filter(q => state.starred.includes(q.id));
     list.innerHTML = starredQuestions.map(q => {
@@ -400,7 +652,7 @@ function openStarredModal() {
       const text = q.question[lang] || q.question.en;
       const shortText = text.length > 80 ? text.substring(0, 80) + '...' : text;
       return `
-        <div class="starred-item" data-id="${q.id}">
+        <div class="starred-item" data-id="${q.id}" role="button" tabindex="0" aria-label="${state.currentLang === 'tr' ? 'Soru' : 'Question'} ${q.id}">
           <div class="starred-item-header">
             <span class="starred-item-id">Q${q.id}</span>
             <span class="starred-item-exercise">${getExerciseLabel(q.exercise)}</span>
@@ -411,7 +663,7 @@ function openStarredModal() {
     }).join('');
     
     list.querySelectorAll('.starred-item').forEach(item => {
-      item.addEventListener('click', () => {
+      const handler = () => {
         const id = parseInt(item.dataset.id);
         const idx = questions.findIndex(q => q.id === id);
         if (idx > -1) {
@@ -423,18 +675,117 @@ function openStarredModal() {
           closeStarredModal();
           renderQuestion();
         }
+      };
+      item.addEventListener('click', handler);
+      item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handler();
+        }
       });
     });
   }
   
   modal.classList.add('active');
+  modal.setAttribute('aria-hidden', 'false');
+  const closeBtn = document.getElementById('closeStarredModal');
+  if (closeBtn) closeBtn.focus();
 }
 
 function closeStarredModal() {
   const modal = document.getElementById('starredModal');
   if (modal) {
     modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
   }
+}
+
+function setupSwipeGestures() {
+  const card = elements.questionCard;
+  if (!card) return;
+
+  card.addEventListener('touchstart', (e) => {
+    state.swipeStartX = e.touches[0].clientX;
+    state.swipeStartY = e.touches[0].clientY;
+    state.isSwiping = true;
+  }, { passive: true });
+
+  card.addEventListener('touchmove', (e) => {
+    if (!state.isSwiping) return;
+    const currentX = e.touches[0].clientX;
+    const diff = currentX - state.swipeStartX;
+    const leftIndicator = card.querySelector('.swipe-indicator.left');
+    const rightIndicator = card.querySelector('.swipe-indicator.right');
+
+    if (Math.abs(diff) > 30) {
+      if (diff > 0) {
+        rightIndicator?.classList.add('visible');
+        leftIndicator?.classList.remove('visible');
+      } else {
+        leftIndicator?.classList.add('visible');
+        rightIndicator?.classList.remove('visible');
+      }
+    }
+  }, { passive: true });
+
+  card.addEventListener('touchend', (e) => {
+    if (!state.isSwiping) return;
+    state.isSwiping = false;
+    const endX = e.changedTouches[0].clientX;
+    const diff = endX - state.swipeStartX;
+    const threshold = 60;
+
+    card.querySelectorAll('.swipe-indicator').forEach(el => el.classList.remove('visible'));
+
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) prevQuestion();
+      else nextQuestion();
+    }
+  }, { passive: true });
+}
+
+function setupKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    if (yaverCalc?.classList.contains('active')) {
+      if (e.key === 'Enter') yaverCalcEquals?.click();
+      else if (e.key === 'Escape') { yaverCalc.classList.remove('active'); yaverCalcToggle?.classList.add('show'); }
+      else if (e.key === 'Backspace') { calcValue = calcValue.slice(0, -1); calcDisplay.value = calcValue; }
+      return;
+    }
+
+    const modal = document.getElementById('starredModal');
+    if (modal?.classList.contains('active')) {
+      if (e.key === 'Escape') closeStarredModal();
+      return;
+    }
+
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+    switch (e.key) {
+      case 'ArrowLeft':
+        e.preventDefault();
+        prevQuestion();
+        break;
+      case 'ArrowRight':
+        e.preventDefault();
+        nextQuestion();
+        break;
+      case 's':
+      case 'S':
+        e.preventDefault();
+        toggleSolution();
+        break;
+      case 'h':
+      case 'H':
+      case '?':
+        e.preventDefault();
+        toggleKeyboardHint();
+        break;
+      case 'Escape':
+        stopSpeaking();
+        break;
+    }
+  });
 }
 
 function setupEventListeners() {
@@ -448,12 +799,18 @@ function setupEventListeners() {
       document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       renderQuestion();
+      updateKeyboardHint();
     });
   });
   document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
+      const rect = btn.getBoundingClientRect();
+      btn.style.setProperty('--ripple-x', `${e.clientX - rect.left}px`);
+      btn.style.setProperty('--ripple-y', `${e.clientY - rect.top}px`);
+      btn.classList.add('ripple');
+      setTimeout(() => btn.classList.remove('ripple'), 500);
       state.filter = btn.dataset.filter;
       state.currentQuestion = 0;
       renderQuestion();
@@ -522,6 +879,17 @@ function setupEventListeners() {
   updateStarredCount();
 }
 
+function updateKeyboardHint() {
+  const hint = document.getElementById('keyboardHint');
+  if (!hint) return;
+  hint.innerHTML = `
+    <kbd><span>←</span> ${state.currentLang === 'tr' ? 'Önceki' : 'Previous'}</kbd>
+    <kbd><span>→</span> ${state.currentLang === 'tr' ? 'Sonraki' : 'Next'}</kbd>
+    <kbd><span>S</span> ${state.currentLang === 'tr' ? 'Çözüm' : 'Solution'}</kbd>
+    <kbd><span>?</span> ${state.currentLang === 'tr' ? 'Yardım' : 'Help'}</kbd>
+  `;
+}
+
 document.addEventListener('DOMContentLoaded', init);
 
 // Yaver Hesap Aygıtı
@@ -569,7 +937,6 @@ if (calcCloseFloat) {
   });
 }
 
-// Sürükleme
 let isDragging = false, dragOffsetX, dragOffsetY;
 
 if (calcDragHandle && yaverCalc) {
@@ -607,7 +974,6 @@ if (calcDragHandle && yaverCalc) {
   document.addEventListener('touchend', () => isDragging = false);
 }
 
-// Sayı tuşları
 document.querySelectorAll('.yaver-btn-num').forEach(btn => {
   btn.addEventListener('click', () => {
     if (calcLastWasResult && !isNaN(btn.dataset.val)) { calcValue = ''; calcLastWasResult = false; }
@@ -617,7 +983,6 @@ document.querySelectorAll('.yaver-btn-num').forEach(btn => {
   });
 });
 
-// Fonksiyon tuşları
 document.querySelectorAll('.yaver-btn-fn').forEach(btn => {
   btn.addEventListener('click', () => {
     const fn = btn.dataset.val;
@@ -641,7 +1006,6 @@ document.querySelectorAll('.yaver-btn-fn').forEach(btn => {
   });
 });
 
-// Operatör tuşları
 document.querySelectorAll('.yaver-btn-op').forEach(btn => {
   btn.addEventListener('click', () => {
     if (!calcValue && calcDisplay.value) calcValue = calcDisplay.value;
@@ -652,20 +1016,17 @@ document.querySelectorAll('.yaver-btn-op').forEach(btn => {
   });
 });
 
-// Temizle
 const yaverCalcClear = document.getElementById('calcClear');
 if (yaverCalcClear) yaverCalcClear.addEventListener('click', () => {
   calcValue = ''; calcDisplay.value = ''; calcLastWasResult = false; calcHistory.textContent = '';
 });
 
-// Sil
 const calcDel = document.getElementById('calcDel');
 if (calcDel) calcDel.addEventListener('click', () => {
   calcValue = calcValue.slice(0, -1);
   calcDisplay.value = calcValue;
 });
 
-// Eşittir
 const yaverCalcEquals = document.getElementById('calcEquals');
 if (yaverCalcEquals) yaverCalcEquals.addEventListener('click', () => {
   try {
@@ -679,7 +1040,6 @@ if (yaverCalcEquals) yaverCalcEquals.addEventListener('click', () => {
   } catch { calcDisplay.value = 'Hata'; calcValue = ''; }
 });
 
-// Yüzde
 document.querySelectorAll('.yaver-btn-percent').forEach(btn => {
   btn.addEventListener('click', () => {
     const val = parseFloat(calcValue) || 0;
@@ -687,12 +1047,4 @@ document.querySelectorAll('.yaver-btn-percent').forEach(btn => {
     calcValue = (val / 100).toString();
     calcLastWasResult = true;
   });
-});
-
-// Klavye
-document.addEventListener('keydown', (e) => {
-  if (!yaverCalc?.classList.contains('active')) return;
-  if (e.key === 'Enter') yaverCalcEquals?.click();
-  else if (e.key === 'Escape') { yaverCalc.classList.remove('active'); yaverCalcToggle?.classList.add('show'); }
-  else if (e.key === 'Backspace') { calcValue = calcValue.slice(0, -1); calcDisplay.value = calcValue; }
 });
