@@ -35,7 +35,8 @@ const elements = {
   questionDots: document.getElementById('questionDots'),
   langToggle: document.getElementById('langToggle'),
   hoporlorBtn: document.getElementById('hoporlorBtn'),
-  audioBtn: document.getElementById('audioBtn')
+  audioBtn: document.getElementById('audioBtn'),
+  calcBtn: document.getElementById('calcBtn')
 };
 
 function getFilteredQuestions() {
@@ -258,3 +259,176 @@ function setupEventListeners() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+// Yaver Hesap Aygıtı
+const yaverCalc = document.getElementById('yaverCalc');
+const yaverCalcToggle = document.getElementById('yaverCalcToggle');
+const calcDragHandle = document.getElementById('calcDragHandle');
+const calcBody = document.getElementById('calcBody');
+const calcDisplay = document.getElementById('calcDisplay');
+const calcHistory = document.getElementById('calcHistory');
+const calcMinimize = document.getElementById('calcMinimize');
+const calcCloseFloat = document.getElementById('calcCloseFloat');
+
+let calcValue = '';
+let calcLastWasResult = false;
+let calcMinimized = false;
+
+if (yaverCalcToggle) {
+  yaverCalcToggle.addEventListener('click', () => {
+    yaverCalc.classList.toggle('active');
+    yaverCalcToggle.classList.toggle('show');
+    if (yaverCalc.classList.contains('active')) calcDisplay.focus();
+  });
+}
+
+if (yaverCalc && elements.calcBtn) {
+  elements.calcBtn.addEventListener('click', () => {
+    yaverCalc.classList.add('active');
+    yaverCalcToggle.classList.add('show');
+    calcDisplay.focus();
+  });
+}
+
+if (calcMinimize) {
+  calcMinimize.addEventListener('click', () => {
+    calcMinimized = !calcMinimized;
+    if (calcBody) calcBody.style.display = calcMinimized ? 'none' : 'block';
+    calcMinimize.textContent = calcMinimized ? '☰' : '─';
+  });
+}
+
+if (calcCloseFloat) {
+  calcCloseFloat.addEventListener('click', () => {
+    yaverCalc.classList.remove('active');
+    yaverCalcToggle.classList.add('show');
+  });
+}
+
+// Sürükleme
+let isDragging = false, dragOffsetX, dragOffsetY;
+
+if (calcDragHandle && yaverCalc) {
+  calcDragHandle.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    dragOffsetX = e.clientX - yaverCalc.getBoundingClientRect().left;
+    dragOffsetY = e.clientY - yaverCalc.getBoundingClientRect().top;
+    yaverCalc.style.transition = 'none';
+  });
+  
+  document.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      yaverCalc.style.right = 'auto';
+      yaverCalc.style.left = (e.clientX - dragOffsetX) + 'px';
+      yaverCalc.style.top = (e.clientY - dragOffsetY) + 'px';
+    }
+  });
+  
+  document.addEventListener('mouseup', () => { isDragging = false; yaverCalc.style.transition = ''; });
+  
+  calcDragHandle.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    dragOffsetX = e.touches[0].clientX - yaverCalc.getBoundingClientRect().left;
+    dragOffsetY = e.touches[0].clientY - yaverCalc.getBoundingClientRect().top;
+  });
+  
+  document.addEventListener('touchmove', (e) => {
+    if (isDragging) {
+      yaverCalc.style.right = 'auto';
+      yaverCalc.style.left = (e.touches[0].clientX - dragOffsetX) + 'px';
+      yaverCalc.style.top = (e.touches[0].clientY - dragOffsetY) + 'px';
+    }
+  });
+  
+  document.addEventListener('touchend', () => isDragging = false);
+}
+
+// Sayı tuşları
+document.querySelectorAll('.yaver-btn-num').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (calcLastWasResult && !isNaN(btn.dataset.val)) { calcValue = ''; calcLastWasResult = false; }
+    calcValue += btn.dataset.val;
+    calcDisplay.value = calcValue;
+    calcHistory.textContent = '';
+  });
+});
+
+// Fonksiyon tuşları
+document.querySelectorAll('.yaver-btn-fn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const fn = btn.dataset.val;
+    const val = parseFloat(calcValue) || 0;
+    let result = 0;
+    switch(fn) {
+      case 'sin': result = Math.sin(val * Math.PI / 180); break;
+      case 'cos': result = Math.cos(val * Math.PI / 180); break;
+      case 'tan': result = Math.tan(val * Math.PI / 180); break;
+      case 'log': result = Math.log10(val); break;
+      case 'ln': result = Math.log(val); break;
+      case 'sqrt': result = Math.sqrt(val); break;
+      case 'pow': result = Math.pow(val, 2); break;
+      case 'pi': calcValue = val ? (val * Math.PI).toString() : Math.PI.toString(); calcDisplay.value = calcValue; return;
+      case 'e': calcValue = val ? (val * Math.E).toString() : Math.E.toString(); calcDisplay.value = calcValue; return;
+      case '(': case ')': calcValue += fn; calcDisplay.value = calcValue; return;
+    }
+    calcDisplay.value = result;
+    calcValue = result.toString();
+    calcLastWasResult = true;
+  });
+});
+
+// Operatör tuşları
+document.querySelectorAll('.yaver-btn-op').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!calcValue && calcDisplay.value) calcValue = calcDisplay.value;
+    calcValue += btn.dataset.val;
+    calcDisplay.value = calcValue;
+    calcLastWasResult = false;
+    calcHistory.textContent = '';
+  });
+});
+
+// Temizle
+const yaverCalcClear = document.getElementById('calcClear');
+if (yaverCalcClear) yaverCalcClear.addEventListener('click', () => {
+  calcValue = ''; calcDisplay.value = ''; calcLastWasResult = false; calcHistory.textContent = '';
+});
+
+// Sil
+const calcDel = document.getElementById('calcDel');
+if (calcDel) calcDel.addEventListener('click', () => {
+  calcValue = calcValue.slice(0, -1);
+  calcDisplay.value = calcValue;
+});
+
+// Eşittir
+const yaverCalcEquals = document.getElementById('calcEquals');
+if (yaverCalcEquals) yaverCalcEquals.addEventListener('click', () => {
+  try {
+    let expr = calcValue;
+    calcHistory.textContent = calcValue + ' =';
+    expr = expr.replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-');
+    const result = eval(expr);
+    calcDisplay.value = result;
+    calcValue = result.toString();
+    calcLastWasResult = true;
+  } catch { calcDisplay.value = 'Hata'; calcValue = ''; }
+});
+
+// Yüzde
+document.querySelectorAll('.yaver-btn-percent').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const val = parseFloat(calcValue) || 0;
+    calcDisplay.value = val / 100;
+    calcValue = (val / 100).toString();
+    calcLastWasResult = true;
+  });
+});
+
+// Klavye
+document.addEventListener('keydown', (e) => {
+  if (!yaverCalc?.classList.contains('active')) return;
+  if (e.key === 'Enter') yaverCalcEquals?.click();
+  else if (e.key === 'Escape') { yaverCalc.classList.remove('active'); yaverCalcToggle?.classList.add('show'); }
+  else if (e.key === 'Backspace') { calcValue = calcValue.slice(0, -1); calcDisplay.value = calcValue; }
+});
