@@ -415,84 +415,81 @@ function generateSolutionNarrative(question, solutionText) {
   return narrative;
 }
 
-function speak(text, lang = 'tr') {
+let currentText = '';
+let isPaused = false;
+
+function speak(text) {
   if (!('speechSynthesis' in window)) {
     alert('Tarayıcınız konuşma özelliklerini desteklemiyor.');
     return;
   }
   
-  if (window.speechSynthesis.speaking) {
-    if (window.speechSynthesis.paused) {
-      window.speechSynthesis.resume();
-    } else {
-      window.speechSynthesis.pause();
-    }
+  const synth = window.speechSynthesis;
+  
+  if (synth.speaking && !isPaused) {
+    synth.cancel();
+    isPaused = true;
+    updateAudioButtons();
     return;
   }
   
-  const utterance = new SpeechSynthesisUtterance(text);
+  if (isPaused) {
+    synth.resume();
+    isPaused = false;
+    updateAudioButtons();
+    return;
+  }
   
+  synth.cancel();
+  isPaused = false;
+  currentText = text;
+  
+  const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'tr-TR';
   utterance.rate = 0.85;
   utterance.pitch = 1;
   utterance.volume = 1;
   
-  const voices = window.speechSynthesis.getVoices();
+  const voices = synth.getVoices();
   const turkishVoice = voices.find(v => v.lang.startsWith('tr'));
-  
   if (turkishVoice) {
     utterance.voice = turkishVoice;
   }
   
   utterance.onstart = () => {
-    state.isSpeaking = true;
+    isPaused = false;
     updateAudioButtons();
   };
   
   utterance.onend = () => {
-    state.isSpeaking = false;
-    updateAudioButtons();
-  };
-  
-  utterance.onpause = () => {
-    state.isSpeaking = false;
-    updateAudioButtons();
-  };
-  
-  utterance.onresume = () => {
-    state.isSpeaking = true;
+    isPaused = false;
     updateAudioButtons();
   };
   
   utterance.onerror = () => {
-    state.isSpeaking = false;
+    isPaused = false;
     updateAudioButtons();
   };
   
-  state.currentUtterance = utterance;
-  window.speechSynthesis.speak(utterance);
+  synth.speak(utterance);
 }
 
 function stopSpeaking() {
-  if (window.speechSynthesis.speaking || window.speechSynthesis.paused) {
-    window.speechSynthesis.cancel();
-  }
-  state.isSpeaking = false;
+  window.speechSynthesis.cancel();
+  isPaused = false;
   updateAudioButtons();
 }
 
 function updateAudioButtons() {
-  const isPlaying = window.speechSynthesis.speaking;
-  const isPaused = window.speechSynthesis.paused;
-  const showPause = isPlaying && !isPaused;
+  const isSpeaking = window.speechSynthesis.speaking;
   
   if (elements.hoporlorBtn) {
-    elements.hoporlorBtn.innerHTML = showPause ? '⏸ DURAKLAT' : '🎧 HOPORLOR';
-    elements.hoporlorBtn.classList.toggle('playing', isPlaying || isPaused);
+    elements.hoporlorBtn.innerHTML = isSpeaking ? '⏹ DUR' : '🎧 HOPORLOR';
+    elements.hoporlorBtn.classList.toggle('playing', isSpeaking);
   }
   if (elements.audioBtn) {
-    elements.audioBtn.innerHTML = showPause ? '⏸' : '🔊';
-    elements.audioBtn.classList.toggle('playing', isPlaying || isPaused);
+    elements.audioBtn.innerHTML = isSpeaking ? '⏹' : '🔊';
+    elements.audioBtn.classList.toggle('playing', isSpeaking);
   }
 }
 
