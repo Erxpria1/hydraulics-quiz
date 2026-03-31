@@ -293,14 +293,17 @@ function updateAudioButtons() {
       } else {
         elements.hoporlorBtn.textContent = isPaused ? (state.currentLang === 'tr' ? '▶ Devam' : '▶ Resume') : (state.currentLang === 'tr' ? '⏸ Dur' : '⏸ Pause');
       }
-      elements.hoporlorBtn.classList.toggle('playing', !isPaused);
+      elements.hoporlorBtn.classList.toggle('playing', state.isPlaying);
     } else {
       elements.hoporlorBtn.textContent = state.currentLang === 'tr' ? '🎧 Dinle' : '🎧 Listen';
       elements.hoporlorBtn.classList.remove('playing');
     }
   }
   if (elements.audioBtn) {
-    if (state.speakingType === 'solution') {
+    if (state.speakingType === 'solution' && state.useLocalAudio) {
+      elements.audioBtn.innerHTML = state.isPlaying ? '⏸' : '▶';
+      elements.audioBtn.classList.toggle('playing', state.isPlaying);
+    } else if (state.speakingType === 'solution') {
       elements.audioBtn.innerHTML = isPaused ? '▶' : '⏸';
       elements.audioBtn.classList.toggle('playing', !isPaused);
     } else {
@@ -458,16 +461,42 @@ function setupEventListeners() {
   });
   if (elements.hoporlorBtn) {
     elements.hoporlorBtn.addEventListener('click', () => {
-      const q = getFilteredQuestions()[state.currentQuestion];
-      const text = q.narration?.tr || q.question.tr;
-      handleSpeak(text, 'question');
+      if (state.currentAudio) {
+        if (state.isPlaying) {
+          state.currentAudio.pause();
+          state.isPlaying = false;
+          isPaused = true;
+        } else {
+          state.currentAudio.play();
+          state.isPlaying = true;
+          isPaused = false;
+        }
+        updateAudioButtons();
+      } else {
+        const q = getFilteredQuestions()[state.currentQuestion];
+        const text = q.narration?.tr || q.question.tr;
+        handleSpeak(text, 'question');
+      }
     });
   }
   if (elements.audioBtn) {
     elements.audioBtn.addEventListener('click', () => {
-      const q = getFilteredQuestions()[state.currentQuestion];
-      const text = q.solution.tr || q.solution.en;
-      handleSpeak(text, 'solution');
+      if (state.currentAudio) {
+        if (state.isPlaying) {
+          state.currentAudio.pause();
+          state.isPlaying = false;
+          isPaused = true;
+        } else {
+          state.currentAudio.play();
+          state.isPlaying = true;
+          isPaused = false;
+        }
+        updateAudioButtons();
+      } else {
+        const q = getFilteredQuestions()[state.currentQuestion];
+        const text = q.solution.tr || q.solution.en;
+        handleSpeak(text, 'solution');
+      }
     });
   }
   if (elements.starBtn) {
