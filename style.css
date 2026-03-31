@@ -712,26 +712,14 @@ header {
 .solution-text strong {
   color: #fbbf24;
   font-weight: 800;
-  font-size: 1.15em;
-  text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
-  display: block;
-  margin: 20px 0 10px 0;
-  padding: 8px 12px;
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(251, 191, 36, 0.05));
-  border-left: 4px solid #fbbf24;
-  border-radius: 8px;
-  animation: headerGlow 2s ease-in-out infinite;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
 }
 
-@keyframes headerGlow {
-  0%, 100% {
-    text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
-    box-shadow: 0 0 5px rgba(251, 191, 36, 0.2);
-  }
-  50% {
-    text-shadow: 0 0 20px rgba(251, 191, 36, 0.8), 0 0 30px rgba(251, 191, 36, 0.4);
-    box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
-  }
+.solution-text .katex strong,
+.solution-text .katex-display strong {
+  color: inherit;
+  font-weight: inherit;
+  text-shadow: inherit;
 }
 
 .solution-text em {
