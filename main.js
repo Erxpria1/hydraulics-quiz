@@ -2,9 +2,6 @@ const state = {
   currentQuestion: 0,
   answers: {},
   starred: JSON.parse(localStorage.getItem('starredQuestions') || '[]'),
-  score: 0,
-  correct: 0,
-  wrong: 0,
   filter: 'all',
   currentLang: 'en',
   showSolutions: false,
@@ -14,10 +11,6 @@ const state = {
 const elements = {
   progressBar: document.getElementById('progressBar'),
   progressText: document.getElementById('progressText'),
-  scoreDisplay: document.getElementById('scoreDisplay'),
-  totalDisplay: document.getElementById('totalDisplay'),
-  correctCount: document.getElementById('correctCount'),
-  wrongCount: document.getElementById('wrongCount'),
   questionNumber: document.getElementById('questionNumber'),
   questionExercise: document.getElementById('questionExercise'),
   questionText: document.getElementById('questionText'),
@@ -117,7 +110,6 @@ function renderQuestion() {
   elements.nextNavBtn.disabled = state.currentQuestion === filtered.length - 1;
   
   updateStarButton(question.id);
-  updateStats();
   createDots();
   triggerKaTeX();
   updateButtonTexts();
@@ -167,7 +159,6 @@ function checkNumericAnswer() {
   const isCorrect = Math.abs(userAnswer - correctAnswer) <= Math.abs(correctAnswer * tolerance);
   
   state.answers[q.id] = { selected: userAnswer, correct: isCorrect };
-  if (isCorrect) { state.correct++; state.score += 5; } else state.wrong++;
   
   const label = document.querySelector('label[for="numericInput"]');
   if (label) {
@@ -268,14 +259,12 @@ function selectAnswer(index) {
   if (state.answers[q.id]) return;
   const isCorrect = index === q.correct;
   state.answers[q.id] = { selected: index, correct: isCorrect };
-  if (isCorrect) { state.correct++; state.score += 5; } else state.wrong++;
   renderQuestion();
 }
 
 function nextQuestion() { stopSpeaking(); if (state.currentQuestion < getFilteredQuestions().length - 1) { state.currentQuestion++; renderQuestion(); } }
 function prevQuestion() { stopSpeaking(); if (state.currentQuestion > 0) { state.currentQuestion--; renderQuestion(); } }
 function goToQuestion(index) { state.currentQuestion = index; renderQuestion(); }
-function updateStats() { elements.scoreDisplay.textContent = state.score; elements.correctCount.textContent = state.correct; elements.wrongCount.textContent = state.wrong; }
 function getExerciseLabel(ex) { 
   const labels = { 
     ex1: state.currentLang === 'tr' ? 'Exercise I: Çelik Küre' : 'Exercise I: Steel Ball',
