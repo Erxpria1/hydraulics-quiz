@@ -92,6 +92,7 @@ function renderQuestion() {
   elements.questionText.innerHTML = formatContent(question.question[state.currentLang] || question.question.en);
   
   elements.optionsContainer.innerHTML = '';
+  elements.solutionText.innerHTML = '';
   elements.numericAnswer.style.display = 'none';
   
   if (question.type === 'multiple') renderMultipleChoice(question);
@@ -105,6 +106,7 @@ function renderQuestion() {
     state.showSolutions = true;
   } else {
     elements.solutionContainer.style.display = 'none';
+    elements.solutionText.innerHTML = '';
     elements.showSolutionBtn.textContent = state.currentLang === 'tr' ? 'Çözümü Göster' : 'Show Solution';
     state.showSolutions = false;
   }
@@ -184,7 +186,8 @@ function toggleSolution() {
   const q = getFilteredQuestions()[state.currentQuestion];
   if (state.showSolutions) {
     elements.solutionContainer.style.display = 'none';
-    elements.showSolutionBtn.textContent = state.currentLang === 'tr' ? 'Çözüm' : 'Solution';
+    elements.solutionText.innerHTML = '';
+    elements.showSolutionBtn.textContent = state.currentLang === 'tr' ? 'Çözümü Göster' : 'Show Solution';
     state.showSolutions = false;
   } else {
     elements.solutionContainer.style.display = 'block';
