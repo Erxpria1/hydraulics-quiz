@@ -1,8 +1,13 @@
-# Generated audio files (track audio folder but ignore temp files)
-audio/
-!.gitkeep
+# Virtual environment
 .venv/
-audio_files.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
 
 # OS files
 .DS_Store
