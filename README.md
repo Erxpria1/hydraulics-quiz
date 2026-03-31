@@ -1,35 +1,29 @@
 # Hydraulics Quiz - CE6301
 
-Modern, interaktif hidrolik mühendisliği quiz uygulaması.
+PDF kaynaklı, interaktif hidrolik mühendisliği quiz uygulaması.
+
+## Kaynak
+
+**Exercise 1 PDF:** Steel ball weighing in oil - density calculation
+**Exercise 2 PDF:** Steel ball terminal velocity in oil
 
 ## Özellikler
 
-- **20 Soru** - Boyutsal Analiz, Model Teorisi, Kapalı Borular
-- **Çift Dil** - İngilizce / Türkçe (otomatik çeviri)
-- **TTS** - Soru ve çözümlerin Türkçe sesli okunması (🎧 Dinle / 🔊 Çözüm)
+- **2 Soru** - PDF'lerden eksiksiz
+- **Çift Dil** - İngilizce / Türkçe
+- **TTS** - Soru ve çözümlerin Türkçe sesli okunması
 - **KaTeX** - Matematik formüllerin güzel renderlanması
-- **Hesap Makinesi** - Sürüklenebilir, bilimsel hesap makinesi (sin, cos, tan, log, ln, √, x²)
+- **Hesap Makinesi** - Sürüklenebilir, bilimsel hesap makinesi
+- **Yıldızlama** - Önemli soruları kaydet
 - **Glass Effect** - Modern cam efektli tasarım
-- **Responsive** - Mobil uyumlu
 
-## Konular
+## Sorular
 
-### Exercise I: Boyutsal Analiz (6 soru)
-- MLT sistemi
-- Buckingham Pi Teoremi
-- Reynolds Sayısı
-- Viskozite boyutları
+### Exercise I: Çelik Küre Yoğunluğu
+3 cm çaplı çelik kürenin yağda ve havadaki ağırlık farkından yoğunluk hesabı.
 
-### Exercise II: Model Teorisi (6 soru)
-- Froude Benzerliği
-- Ölçek oranları
-- Geometrik benzerlik
-
-### Exercise III: Kapalı Borular (8 soru)
-- Darcy-Weisbach
-- Sürtünme faktörü
-- Moody diagramı
-- Hagen-Poiseuille
+### Exercise II: Terminal Hız
+Çelik kürenin yağdaki terminal (düşme) hızının hesabı.
 
 ## Teknolojiler
 
@@ -37,13 +31,6 @@ Modern, interaktif hidrolik mühendisliği quiz uygulaması.
 - KaTeX (LaTeX math rendering)
 - Web Speech API (TTS)
 - CSS Glass Morphism
-
-## Kullanım
-
-```bash
-# Yerel çalıştırma
-open index.html
-```
 
 ## Demo
 

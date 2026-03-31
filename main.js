@@ -278,9 +278,8 @@ function goToQuestion(index) { state.currentQuestion = index; renderQuestion(); 
 function updateStats() { elements.scoreDisplay.textContent = state.score; elements.correctCount.textContent = state.correct; elements.wrongCount.textContent = state.wrong; }
 function getExerciseLabel(ex) { 
   const labels = { 
-    ex1: state.currentLang === 'tr' ? 'Boyutsal Analiz' : 'Dimensional Analysis',
-    ex2: state.currentLang === 'tr' ? 'Model Teorisi' : 'Model Theory',
-    ex3: state.currentLang === 'tr' ? 'Kapalı Borular' : 'Closed Conduit'
+    ex1: state.currentLang === 'tr' ? 'Exercise I: Çelik Küre' : 'Exercise I: Steel Ball',
+    ex2: state.currentLang === 'tr' ? 'Exercise II: Terminal Hız' : 'Exercise II: Terminal Velocity'
   };
   return labels[ex] || ex;
 }
@@ -296,9 +295,8 @@ function updateFilterTabTexts() {
     const filter = btn.dataset.filter;
     const lang = state.currentLang;
     if (filter === 'all') btn.textContent = lang === 'tr' ? 'Tümü' : 'All';
-    else if (filter === 'ex1') btn.textContent = lang === 'tr' ? 'Soru I: Boyutsal' : 'Ex I: Dimensional';
-    else if (filter === 'ex2') btn.textContent = lang === 'tr' ? 'Soru II: Model' : 'Ex II: Model';
-    else if (filter === 'ex3') btn.textContent = lang === 'tr' ? 'Soru III: Boru' : 'Ex III: Pipe';
+    else if (filter === 'ex1') btn.textContent = lang === 'tr' ? 'Soru I: Çelik Küre' : 'Ex I: Steel Ball';
+    else if (filter === 'ex2') btn.textContent = lang === 'tr' ? 'Soru II: Terminal Hız' : 'Ex II: Terminal Velocity';
   });
 }
 
