@@ -267,8 +267,9 @@ function prevQuestion() { stopSpeaking(); if (state.currentQuestion > 0) { state
 function goToQuestion(index) { state.currentQuestion = index; renderQuestion(); }
 function getExerciseLabel(ex) { 
   const labels = { 
-    ex1: state.currentLang === 'tr' ? 'Exercise I: Çelik Küre' : 'Exercise I: Steel Ball',
-    ex2: state.currentLang === 'tr' ? 'Exercise II: Terminal Hız' : 'Exercise II: Terminal Velocity'
+    ex1: 'Exercise 1',
+    ex2: 'Exercise 2',
+    ex3: 'Exercise 3'
   };
   return labels[ex] || ex;
 }
@@ -284,8 +285,9 @@ function updateFilterTabTexts() {
     const filter = btn.dataset.filter;
     const lang = state.currentLang;
     if (filter === 'all') btn.textContent = lang === 'tr' ? 'Tümü' : 'All';
-    else if (filter === 'ex1') btn.textContent = lang === 'tr' ? 'Soru I: Çelik Küre' : 'Ex I: Steel Ball';
-    else if (filter === 'ex2') btn.textContent = lang === 'tr' ? 'Soru II: Terminal Hız' : 'Ex II: Terminal Velocity';
+    else if (filter === 'ex1') btn.textContent = lang === 'tr' ? 'Egzersiz 1' : 'Exercise 1';
+    else if (filter === 'ex2') btn.textContent = lang === 'tr' ? 'Egzersiz 2' : 'Exercise 2';
+    else if (filter === 'ex3') btn.textContent = lang === 'tr' ? 'Egzersiz 3' : 'Exercise 3';
   });
 }
 
