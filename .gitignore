@@ -1,8 +1,8 @@
-# Generated audio files
+# Generated audio files (track audio folder but ignore temp files)
 audio/
+!.gitkeep
 .venv/
 audio_files.json
-*.mp3
 
 # OS files
 .DS_Store
