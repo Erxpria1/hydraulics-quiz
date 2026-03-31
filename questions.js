@@ -4,8 +4,8 @@ const questions = [
     exercise: "ex1",
     type: "numeric",
     question: {
-      en: "A steel ball of 3 cm diameter is weighed in oil (μ = 0.1 Pa·s, ρ_oil = 900 kg/m³) and found to weigh 0.06 N less in oil than in air. Determine the density of the steel ball. (g = 9.81 m/s²)",
-      tr: "3 cm çaplı çelik bir küre, yağda (μ = 0.1 Pa·s, ρ_yag = 900 kg/m³) tartıldığında havadaki ağırlığından 0.06 N daha az geliyor. Çelik kürenin yoğunluğunu bulun. (g = 9.81 m/s²)"
+      en: "A steel ball of <span class='highlight-num'>3 cm</span> diameter is weighed in oil (<span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> Pa·s, <span class='highlight-unit'>ρ_oil</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>) and found to weigh <span class='highlight-num'>0.06</span> <span class='highlight-unit'>N</span> less in oil than in air. Determine the density of the steel ball. (<span class='highlight-var'>g</span> = <span class='highlight-num'>9.81</span> <span class='highlight-unit'>m/s²</span>)",
+      tr: "<span class='highlight-num'>3 cm</span> çaplı çelik bir küre, yağda (<span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> Pa·s, <span class='highlight-unit'>ρ_yag</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>) tartıldığında havadaki ağırlığından <span class='highlight-num'>0.06</span> <span class='highlight-unit'>N</span> daha az geliyor. Çelik kürenin yoğunluğunu bulun. (<span class='highlight-var'>g</span> = <span class='highlight-num'>9.81</span> <span class='highlight-unit'>m/s²</span>)"
     },
     unit: "kg/m³",
     answer: 7900,
@@ -23,8 +23,8 @@ const questions = [
     exercise: "ex2",
     type: "numeric",
     question: {
-      en: "A steel ball of diameter 3 cm and density 7900 kg/m³ is dropped into a tank of oil with viscosity μ = 0.1 Pa·s and density ρ = 900 kg/m³. Find the terminal velocity of the ball. (g = 9.81 m/s²)",
-      tr: "3 cm çaplı ve 7900 kg/m³ yoğunluklu çelik bir küre, viskozitesi μ = 0.1 Pa·s ve yoğunluğu ρ = 900 kg/m³ olan yağ dolu bir tanka bırakılıyor. Kürenin terminal hızını bulun. (g = 9.81 m/s²)"
+      en: "A steel ball of diameter <span class='highlight-num'>3 cm</span> and density <span class='highlight-num'>7900</span> <span class='highlight-unit'>kg/m³</span> is dropped into a tank of oil with viscosity <span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span> and density <span class='highlight-unit'>ρ</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>. Find the terminal velocity of the ball. (<span class='highlight-var'>g</span> = <span class='highlight-num'>9.81</span> <span class='highlight-unit'>m/s²</span>)",
+      tr: "<span class='highlight-num'>3 cm</span> çaplı ve <span class='highlight-num'>7900</span> <span class='highlight-unit'>kg/m³</span> yoğunluklu çelik bir küre, viskozitesi <span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span> ve yoğunluğu <span class='highlight-unit'>ρ</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span> olan yağ dolu bir tanka bırakılıyor. Kürenin terminal hızını bulun. (<span class='highlight-var'>g</span> = <span class='highlight-num'>9.81</span> <span class='highlight-unit'>m/s²</span>)"
     },
     unit: "m/s",
     answer: 0.16,
@@ -42,8 +42,8 @@ const questions = [
     exercise: "ex3",
     type: "numeric",
     question: {
-      en: "A sphere of diameter 2 mm and density 8000 kg/m³ falls through oil (ρ = 900 kg/m³, μ = 0.1 Pa·s). Find the terminal velocity. (g = 9.81 m/s²)",
-      tr: "2 mm çaplı ve 8000 kg/m³ yoğunluklu bir küre, yağdan (ρ = 900 kg/m³, μ = 0.1 Pa·s) düşüyor. Terminal hızı bulun. (g = 9.81 m/s²)"
+      en: "A sphere of diameter <span class='highlight-num'>2 mm</span> and density <span class='highlight-num'>8000</span> <span class='highlight-unit'>kg/m³</span> falls through oil (<span class='highlight-unit'>ρ</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span>). Find the terminal velocity. (<span class='highlight-var'>g</span> = <span class='highlight-num'>9.81</span> <span class='highlight-unit'>m/s²</span>)",
+      tr: "<span class='highlight-num'>2 mm</span> çaplı ve <span class='highlight-num'>8000</span> <span class='highlight-unit'>kg/m³</span> yoğunluklu bir küre, yağdan (<span class='highlight-unit'>ρ</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span>) düşüyor. Terminal hızı bulun. (<span class='highlight-var'>g</span> = <span class='highlight-num'>9.81</span> <span class='highlight-unit'>m/s²</span>)"
     },
     unit: "m/s",
     answer: 0.052,
@@ -61,8 +61,8 @@ const questions = [
     exercise: "ex3",
     type: "numeric",
     question: {
-      en: "A sphere of diameter 2 cm and density 8000 kg/m³ falls through oil (ρ = 900 kg/m³, μ = 0.1 Pa·s). Find the terminal velocity. (g = 9.81 m/s²)",
-      tr: "2 cm çaplı ve 8000 kg/m³ yoğunluklu bir küre, yağdan (ρ = 900 kg/m³, μ = 0.1 Pa·s) düşüyor. Terminal hızı bulun. (g = 9.81 m/s²)"
+      en: "A sphere of diameter <span class='highlight-num'>2 cm</span> and density <span class='highlight-num'>8000</span> <span class='highlight-unit'>kg/m³</span> falls through oil (<span class='highlight-unit'>ρ</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span>). Find the terminal velocity. (<span class='highlight-var'>g</span> = <span class='highlight-num'>9.81</span> <span class='highlight-unit'>m/s²</span>)",
+      tr: "<span class='highlight-num'>2 cm</span> çaplı ve <span class='highlight-num'>8000</span> <span class='highlight-unit'>kg/m³</span> yoğunluklu bir küre, yağdan (<span class='highlight-unit'>ρ</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span>) düşüyor. Terminal hızı bulun. (<span class='highlight-var'>g</span> = <span class='highlight-num'>9.81</span> <span class='highlight-unit'>m/s²</span>)"
     },
     unit: "m/s",
     answer: 0.52,
@@ -80,8 +80,8 @@ const questions = [
     exercise: "ex3",
     type: "numeric",
     question: {
-      en: "A sphere of diameter 20 mm and density 8000 kg/m³ falls through oil (ρ = 900 kg/m³, μ = 0.1 Pa·s). Find the terminal velocity using Newton's Law. (g = 9.81 m/s²)",
-      tr: "20 mm çaplı ve 8000 kg/m³ yoğunluklu bir küre, yağdan (ρ = 900 kg/m³, μ = 0.1 Pa·s) düşüyor. Newton yasasını kullanarak terminal hızı bulun. (g = 9.81 m/s²)"
+      en: "A sphere of diameter <span class='highlight-num'>20 mm</span> and density <span class='highlight-num'>8000</span> <span class='highlight-unit'>kg/m³</span> falls through oil (<span class='highlight-unit'>ρ</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span>). Find the terminal velocity using Newton's Law. (<span class='highlight-var'>g</span> = <span class='highlight-num'>9.81</span> <span class='highlight-unit'>m/s²</span>)",
+      tr: "<span class='highlight-num'>20 mm</span> çaplı ve <span class='highlight-num'>8000</span> <span class='highlight-unit'>kg/m³</span> yoğunluklu bir küre, yağdan (<span class='highlight-unit'>ρ</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span>) düşüyor. Newton yasasını kullanarak terminal hızı bulun. (<span class='highlight-var'>g</span> = <span class='highlight-num'>9.81</span> <span class='highlight-unit'>m/s²</span>)"
     },
     unit: "m/s",
     answer: 0.52,
@@ -99,8 +99,8 @@ const questions = [
     exercise: "ex3",
     type: "numeric",
     question: {
-      en: "Calculate the Reynolds number for a sphere of diameter 20 mm moving with velocity 0.5 m/s in oil (ρ = 900 kg/m³, μ = 0.1 Pa·s).",
-      tr: "20 mm çaplı bir kürenin yağdaki (ρ = 900 kg/m³, μ = 0.1 Pa·s) 0.5 m/s hızla hareket ettiği durumda Reynolds sayısını hesaplayın."
+      en: "Calculate the Reynolds number for a sphere of diameter <span class='highlight-num'>20 mm</span> moving with velocity <span class='highlight-num'>0.5</span> <span class='highlight-unit'>m/s</span> in oil (<span class='highlight-unit'>ρ</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span>).",
+      tr: "<span class='highlight-num'>20 mm</span> çaplı bir kürenin yağdaki (<span class='highlight-unit'>ρ</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span>) <span class='highlight-num'>0.5</span> <span class='highlight-unit'>m/s</span> hızla hareket ettiği durumda Reynolds sayısını hesaplayın."
     },
     unit: "",
     answer: 9,
@@ -118,8 +118,8 @@ const questions = [
     exercise: "ex3",
     type: "numeric",
     question: {
-      en: "A sphere of diameter 2 mm and density 8000 kg/m³ falls through oil (ρ = 900 kg/m³, μ = 0.1 Pa·s). Calculate the Reynolds number at terminal velocity. (g = 9.81 m/s²)",
-      tr: "2 mm çaplı ve 8000 kg/m³ yoğunluklu bir küre, yağdan (ρ = 900 kg/m³, μ = 0.1 Pa·s) düşüyor. Terminal hızda Reynolds sayısını hesaplayın. (g = 9.81 m/s²)"
+      en: "A sphere of diameter <span class='highlight-num'>2 mm</span> and density <span class='highlight-num'>8000</span> <span class='highlight-unit'>kg/m³</span> falls through oil (<span class='highlight-unit'>ρ</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span>). Calculate the Reynolds number at terminal velocity. (<span class='highlight-var'>g</span> = <span class='highlight-num'>9.81</span> <span class='highlight-unit'>m/s²</span>)",
+      tr: "<span class='highlight-num'>2 mm</span> çaplı ve <span class='highlight-num'>8000</span> <span class='highlight-unit'>kg/m³</span> yoğunluklu bir küre, yağdan (<span class='highlight-unit'>ρ</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span>) düşüyor. Terminal hızda Reynolds sayısını hesaplayın. (<span class='highlight-var'>g</span> = <span class='highlight-num'>9.81</span> <span class='highlight-unit'>m/s²</span>)"
     },
     unit: "",
     answer: 0.94,
@@ -137,8 +137,8 @@ const questions = [
     exercise: "ex3",
     type: "numeric",
     question: {
-      en: "A sphere of diameter 2 cm and density 8000 kg/m³ falls through oil (ρ = 900 kg/m³, μ = 0.1 Pa·s). Calculate the Reynolds number at terminal velocity. (g = 9.81 m/s²)",
-      tr: "2 cm çaplı ve 8000 kg/m³ yoğunluklu bir küre, yağdan (ρ = 900 kg/m³, μ = 0.1 Pa·s) düşüyor. Terminal hızda Reynolds sayısını hesaplayın. (g = 9.81 m/s²)"
+      en: "A sphere of diameter <span class='highlight-num'>2 cm</span> and density <span class='highlight-num'>8000</span> <span class='highlight-unit'>kg/m³</span> falls through oil (<span class='highlight-unit'>ρ</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span>). Calculate the Reynolds number at terminal velocity. (<span class='highlight-var'>g</span> = <span class='highlight-num'>9.81</span> <span class='highlight-unit'>m/s²</span>)",
+      tr: "<span class='highlight-num'>2 cm</span> çaplı ve <span class='highlight-num'>8000</span> <span class='highlight-unit'>kg/m³</span> yoğunluklu bir küre, yağdan (<span class='highlight-unit'>ρ</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span>) düşüyor. Terminal hızda Reynolds sayısını hesaplayın. (<span class='highlight-var'>g</span> = <span class='highlight-num'>9.81</span> <span class='highlight-unit'>m/s²</span>)"
     },
     unit: "",
     answer: 94,
@@ -177,8 +177,8 @@ const questions = [
     exercise: "ex3",
     type: "numeric",
     question: {
-      en: "For a sphere falling in oil at terminal velocity: D = 2 mm, ρ_s = 8000 kg/m³, ρ_f = 900 kg/m³, μ = 0.1 Pa·s, g = 9.81 m/s². Calculate the drag force F_D.",
-      tr: "Yağda terminal hızda düşen bir küre için: D = 2 mm, ρ_s = 8000 kg/m³, ρ_f = 900 kg/m³, μ = 0.1 Pa·s, g = 9.81 m/s². Sürükleme kuvveti F_D'yi hesaplayın."
+      en: "For a sphere falling in oil at terminal velocity: D = <span class='highlight-num'>2 mm</span>, <span class='highlight-unit'>ρ_s</span> = <span class='highlight-num'>8000</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-unit'>ρ_f</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span>, <span class='highlight-var'>g</span> = <span class='highlight-num'>9.81</span> <span class='highlight-unit'>m/s²</span>. Calculate the drag force <span class='highlight-unit'>F_D</span>.",
+      tr: "Yağda terminal hızda düşen bir küre için: D = <span class='highlight-num'>2 mm</span>, <span class='highlight-unit'>ρ_küre</span> = <span class='highlight-num'>8000</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-unit'>ρ_yağ</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span>, <span class='highlight-var'>g</span> = <span class='highlight-num'>9.81</span> <span class='highlight-unit'>m/s²</span>. Sürükleme kuvveti <span class='highlight-unit'>F_D</span>'yi hesaplayın."
     },
     unit: "N",
     answer: 0.005,
@@ -196,8 +196,8 @@ const questions = [
     exercise: "ex3",
     type: "numeric",
     question: {
-      en: "For a sphere falling in oil at terminal velocity: D = 2 cm, ρ_s = 8000 kg/m³, ρ_f = 900 kg/m³, μ = 0.1 Pa·s, g = 9.81 m/s². Calculate the drag force F_D.",
-      tr: "Yağda terminal hızda düşen bir küre için: D = 2 cm, ρ_s = 8000 kg/m³, ρ_f = 900 kg/m³, μ = 0.1 Pa·s, g = 9.81 m/s². Sürükleme kuvveti F_D'yi hesaplayın."
+      en: "For a sphere falling in oil at terminal velocity: D = <span class='highlight-num'>2 cm</span>, <span class='highlight-unit'>ρ_s</span> = <span class='highlight-num'>8000</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-unit'>ρ_f</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span>, <span class='highlight-var'>g</span> = <span class='highlight-num'>9.81</span> <span class='highlight-unit'>m/s²</span>. Calculate the drag force <span class='highlight-unit'>F_D</span>.",
+      tr: "Yağda terminal hızda düşen bir küre için: D = <span class='highlight-num'>2 cm</span>, <span class='highlight-unit'>ρ_küre</span> = <span class='highlight-num'>8000</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-unit'>ρ_yağ</span> = <span class='highlight-num'>900</span> <span class='highlight-unit'>kg/m³</span>, <span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span>, <span class='highlight-var'>g</span> = <span class='highlight-num'>9.81</span> <span class='highlight-unit'>m/s²</span>. Sürükleme kuvveti <span class='highlight-unit'>F_D</span>'yi hesaplayın."
     },
     unit: "N",
     answer: 0.05,
@@ -215,8 +215,8 @@ const questions = [
     exercise: "ex3",
     type: "numeric",
     question: {
-      en: "Using Stokes' Law, show that for a sphere falling in fluid: F_D = 3πμDV_t. A sphere of diameter 2 mm falls through oil (μ = 0.1 Pa·s) at V_t = 0.052 m/s. Calculate F_D.",
-      tr: "Stokes yasasını kullanarak, akışkanda düşen küre için: F_D = 3πμDV_t olduğunu gösterin. 2 mm çaplı küre yağdan (μ = 0.1 Pa·s) V_t = 0.052 m/s hızla düşüyor. F_D'yi hesaplayın."
+      en: "Using Stokes' Law, show that for a sphere falling in fluid: <span class='highlight-unit'>F_D</span> = 3π<span class='highlight-var'>μ</span><span class='highlight-unit'>D</span><span class='highlight-unit'>V_t</span>. A sphere of diameter <span class='highlight-num'>2 mm</span> falls through oil (<span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span>) at <span class='highlight-unit'>V_t</span> = <span class='highlight-num'>0.052</span> <span class='highlight-unit'>m/s</span>. Calculate <span class='highlight-unit'>F_D</span>.",
+      tr: "Stokes yasasını kullanarak, akışkanda düşen küre için: <span class='highlight-unit'>F_D</span> = 3π<span class='highlight-var'>μ</span><span class='highlight-unit'>D</span><span class='highlight-unit'>V_t</span> olduğunu gösterin. <span class='highlight-num'>2 mm</span> çaplı küre yağdan (<span class='highlight-var'>μ</span> = <span class='highlight-num'>0.1</span> <span class='highlight-unit'>Pa·s</span>) <span class='highlight-unit'>V_t</span> = <span class='highlight-num'>0.052</span> <span class='highlight-unit'>m/s</span> hızla düşüyor. <span class='highlight-unit'>F_D</span>'yi hesaplayın."
     },
     unit: "N",
     answer: 0.000098,
