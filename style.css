@@ -755,6 +755,52 @@ header {
   text-shadow: 0 0 10px rgba(251, 146, 60, 0.6);
 }
 
+/* ===== SOLUTION HIGHLIGHT STYLES ===== */
+.solution-text .highlight-num {
+  color: #4ade80;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
+  background: rgba(74, 222, 128, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  animation: numGlow 2s ease-in-out infinite;
+}
+
+@keyframes numGlow {
+  0%, 100% { box-shadow: 0 0 5px rgba(74, 222, 128, 0.3); }
+  50% { box-shadow: 0 0 15px rgba(74, 222, 128, 0.5); }
+}
+
+.solution-text .highlight-unit {
+  color: #fbbf24;
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+  background: rgba(251, 191, 36, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  animation: unitGlow 2.5s ease-in-out infinite;
+}
+
+@keyframes unitGlow {
+  0%, 100% { box-shadow: 0 0 5px rgba(251, 191, 36, 0.3); }
+  50% { box-shadow: 0 0 15px rgba(251, 191, 36, 0.5); }
+}
+
+.solution-text .highlight-var {
+  color: #a78bfa;
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(167, 139, 250, 0.5);
+  background: rgba(167, 139, 250, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  animation: varGlow 2.2s ease-in-out infinite;
+}
+
+@keyframes varGlow {
+  0%, 100% { box-shadow: 0 0 5px rgba(167, 139, 250, 0.3); }
+  50% { box-shadow: 0 0 15px rgba(167, 139, 250, 0.5); }
+}
+
 /* ===== KATEX - Ateş/İhya Tema ===== */
 .katex { 
   font-size: 1.25em !important; 
