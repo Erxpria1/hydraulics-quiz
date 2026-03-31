@@ -7,6 +7,7 @@ const state = {
   filter: 'all',
   currentLang: 'en',
   showSolutions: false,
+  speakingType: null, // 'question' veya 'solution'
 };
 
 const elements = {
@@ -34,7 +35,8 @@ const elements = {
   questionDots: document.getElementById('questionDots'),
   langToggle: document.getElementById('langToggle'),
   hoporlorBtn: document.getElementById('hoporlorBtn'),
-  audioBtn: document.getElementById('audioBtn')
+  audioBtn: document.getElementById('audioBtn'),
+  calcBtn: document.getElementById('calcBtn')
 };
 
 function getFilteredQuestions() {
@@ -70,7 +72,10 @@ function createDots() {
       dot.classList.add('active');
     }
     
-    dot.addEventListener('click', () => goToQuestion(index));
+    dot.addEventListener('click', () => {
+      stopSpeaking();
+      goToQuestion(index);
+    });
     elements.questionDots.appendChild(dot);
   });
 }
@@ -275,6 +280,7 @@ function toggleSolution() {
 }
 
 function nextQuestion() {
+  stopSpeaking();
   const filtered = getFilteredQuestions();
   if (state.currentQuestion < filtered.length - 1) {
     state.currentQuestion++;
@@ -283,6 +289,7 @@ function nextQuestion() {
 }
 
 function prevQuestion() {
+  stopSpeaking();
   if (state.currentQuestion > 0) {
     state.currentQuestion--;
     renderQuestion();
@@ -311,6 +318,7 @@ function getExerciseLabel(exercise) {
 }
 
 function switchLanguage(lang) {
+  stopSpeaking();
   state.currentLang = lang;
   
   document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -341,6 +349,7 @@ function setupEventListeners() {
   
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
+      stopSpeaking();
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       state.filter = btn.dataset.filter;
@@ -351,107 +360,98 @@ function setupEventListeners() {
   });
   
   if (elements.hoporlorBtn) {
-    elements.hoporlorBtn.addEventListener('click', speakQuestion);
+    elements.hoporlorBtn.addEventListener('click', () => {
+      const q = getFilteredQuestions()[state.currentQuestion];
+      const text = q.narration?.tr || q.question[state.currentLang] || q.question.en;
+      handleSpeak(text, 'question');
+    });
   }
   
   if (elements.audioBtn) {
-    elements.audioBtn.addEventListener('click', speakSolution);
+    elements.audioBtn.addEventListener('click', () => {
+      const q = getFilteredQuestions()[state.currentQuestion];
+      const text = q.solution[state.currentLang] || q.solution.en;
+      handleSpeak(text, 'solution');
+    });
   }
 }
 
-function speakQuestion() {
-  const filtered = getFilteredQuestions();
-  const question = filtered[state.currentQuestion];
-  if (!question) return;
-  
-  stopSpeaking();
-  const narration = question.narration?.tr || question.solution?.tr || question.solution?.en;
-  speak(narration);
-}
-
-function speakSolution() {
-  const filtered = getFilteredQuestions();
-  const question = filtered[state.currentQuestion];
-  if (!question || state.answers[question.id] === undefined) return;
-  
-  stopSpeaking();
-  const narration = question.narration?.tr || question.solution?.tr || question.solution?.en;
-  speak(narration);
-}
-
+// TTS MANTIĞI - YENİLENMİŞ
 let isPaused = false;
 
-function speak(text) {
-  if (!('speechSynthesis' in window)) {
-    alert('Tarayıcınız konuşma özelliklerini desteklemiyor.');
-    return;
-  }
-  
+function handleSpeak(text, type) {
   const synth = window.speechSynthesis;
-  
-  if (synth.speaking && !isPaused) {
-    synth.cancel();
-    isPaused = true;
+
+  // Eğer zaten konuşuyorsa ve aynı tipse (örn: soru okurken tekrar soruya basıldıysa)
+  if (synth.speaking && state.speakingType === type) {
+    if (isPaused) {
+      synth.resume();
+      isPaused = false;
+    } else {
+      synth.pause();
+      isPaused = true;
+    }
     updateAudioButtons();
     return;
   }
+
+  // Eğer başka bir şey konuşuyorsa veya yeni bir şey başlatılıyorsa
+  stopSpeaking();
   
-  if (isPaused) {
-    synth.resume();
-    isPaused = false;
-    updateAudioButtons();
-    return;
-  }
-  
-  synth.cancel();
+  state.speakingType = type;
   isPaused = false;
-  
+
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'tr-TR';
-  utterance.rate = 0.85;
-  utterance.pitch = 1;
-  utterance.volume = 1;
+  utterance.lang = state.currentLang === 'tr' ? 'tr-TR' : 'en-US';
+  utterance.rate = 0.9;
   
+  // Ses seçimi
   const voices = synth.getVoices();
-  const turkishVoice = voices.find(v => v.lang.startsWith('tr'));
-  if (turkishVoice) {
-    utterance.voice = turkishVoice;
-  }
-  
-  utterance.onstart = () => {
-    isPaused = false;
-    updateAudioButtons();
-  };
-  
+  const targetVoice = voices.find(v => v.lang.startsWith(state.currentLang));
+  if (targetVoice) utterance.voice = targetVoice;
+
+  utterance.onstart = () => updateAudioButtons();
+  utterance.onpause = () => updateAudioButtons();
+  utterance.onresume = () => updateAudioButtons();
   utterance.onend = () => {
+    state.speakingType = null;
     isPaused = false;
     updateAudioButtons();
   };
-  
-  utterance.onerror = () => {
-    isPaused = false;
-    updateAudioButtons();
-  };
-  
+
   synth.speak(utterance);
 }
 
 function stopSpeaking() {
   window.speechSynthesis.cancel();
+  state.speakingType = null;
   isPaused = false;
   updateAudioButtons();
 }
 
 function updateAudioButtons() {
-  const isSpeaking = window.speechSynthesis.speaking;
+  const synth = window.speechSynthesis;
   
+  // Soru butonu güncelleme
   if (elements.hoporlorBtn) {
-    elements.hoporlorBtn.innerHTML = isSpeaking ? '⏹ HOPORLOR' : '🎧 HOPORLOR';
-    elements.hoporlorBtn.classList.toggle('playing', isSpeaking);
+    if (state.speakingType === 'question') {
+      elements.hoporlorBtn.innerHTML = isPaused ? '▶ DEVAM' : '⏸ DURAKLAT';
+      elements.hoporlorBtn.classList.toggle('playing', !isPaused);
+    } else {
+      elements.hoporlorBtn.innerHTML = '🎧 HOPORLOR';
+      elements.hoporlorBtn.classList.remove('playing');
+    }
   }
+
+  // Çözüm butonu güncelleme
   if (elements.audioBtn) {
-    elements.audioBtn.innerHTML = isSpeaking ? '⏹' : '🔊';
-    elements.audioBtn.classList.toggle('playing', isSpeaking);
+    if (state.speakingType === 'solution') {
+      elements.audioBtn.innerHTML = isPaused ? '▶' : '⏸';
+      elements.audioBtn.classList.toggle('playing', !isPaused);
+    } else {
+      elements.audioBtn.innerHTML = '🔊';
+      elements.audioBtn.classList.remove('playing');
+    }
   }
 }
 
@@ -461,109 +461,181 @@ if ('speechSynthesis' in window) {
   };
 }
 
-// Calculator
-const calcModal = document.getElementById('calcModal');
-const calcBtn = document.getElementById('calcBtn');
-const calcClose = document.getElementById('calcClose');
+// Yaver Hesap Aygıtı
+const yaverCalc = document.getElementById('yaverCalc');
+const yaverCalcToggle = document.getElementById('yaverCalcToggle');
+const calcDragHandle = document.getElementById('calcDragHandle');
+const calcBody = document.getElementById('calcBody');
 const calcDisplay = document.getElementById('calcDisplay');
-const calcClear = document.getElementById('calcClear');
-const calcEquals = document.getElementById('calcEquals');
+const calcHistory = document.getElementById('calcHistory');
+const calcMinimize = document.getElementById('calcMinimize');
+const calcCloseFloat = document.getElementById('calcCloseFloat');
 
 let calcValue = '';
 let calcLastWasResult = false;
+let calcMinimized = false;
 
-if (calcBtn) {
-  calcBtn.addEventListener('click', () => {
-    calcModal.classList.add('active');
+if (yaverCalcToggle) {
+  yaverCalcToggle.addEventListener('click', () => {
+    yaverCalc.classList.toggle('active');
+    yaverCalcToggle.classList.toggle('show');
+    if (yaverCalc.classList.contains('active')) {
+      calcDisplay.focus();
+    }
+  });
+}
+
+if (yaverCalc && elements.calcBtn) {
+  elements.calcBtn.addEventListener('click', () => {
+    yaverCalc.classList.add('active');
+    yaverCalcToggle.classList.add('show');
     calcDisplay.focus();
   });
 }
 
-if (calcClose) {
-  calcClose.addEventListener('click', () => {
-    calcModal.classList.remove('active');
+if (calcMinimize) {
+  calcMinimize.addEventListener('click', () => {
+    calcMinimized = !calcMinimized;
+    if (calcBody) calcBody.style.display = calcMinimized ? 'none' : 'block';
+    calcMinimize.textContent = calcMinimized ? '☰' : '─';
   });
 }
 
-if (calcModal) {
-  calcModal.addEventListener('click', (e) => {
-    if (e.target === calcModal) {
-      calcModal.classList.remove('active');
+if (calcCloseFloat) {
+  calcCloseFloat.addEventListener('click', () => {
+    yaverCalc.classList.remove('active');
+    yaverCalcToggle.classList.add('show');
+  });
+}
+
+// Sürükleme
+let isDragging = false, dragOffsetX, dragOffsetY;
+
+if (calcDragHandle && yaverCalc) {
+  calcDragHandle.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    dragOffsetX = e.clientX - yaverCalc.getBoundingClientRect().left;
+    dragOffsetY = e.clientY - yaverCalc.getBoundingClientRect().top;
+    yaverCalc.style.transition = 'none';
+  });
+  
+  document.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      yaverCalc.style.right = 'auto';
+      yaverCalc.style.left = (e.clientX - dragOffsetX) + 'px';
+      yaverCalc.style.top = (e.clientY - dragOffsetY) + 'px';
     }
   });
+  
+  document.addEventListener('mouseup', () => { isDragging = false; yaverCalc.style.transition = ''; });
+  
+  calcDragHandle.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    dragOffsetX = e.touches[0].clientX - yaverCalc.getBoundingClientRect().left;
+    dragOffsetY = e.touches[0].clientY - yaverCalc.getBoundingClientRect().top;
+  });
+  
+  document.addEventListener('touchmove', (e) => {
+    if (isDragging) {
+      yaverCalc.style.right = 'auto';
+      yaverCalc.style.left = (e.touches[0].clientX - dragOffsetX) + 'px';
+      yaverCalc.style.top = (e.touches[0].clientY - dragOffsetY) + 'px';
+    }
+  });
+  
+  document.addEventListener('touchend', () => isDragging = false);
 }
 
-document.querySelectorAll('.calc-btn-num').forEach(btn => {
+// Sayı tuşları
+document.querySelectorAll('.yaver-btn-num').forEach(btn => {
   btn.addEventListener('click', () => {
-    if (calcLastWasResult && !isNaN(btn.dataset.val)) {
-      calcValue = '';
-      calcLastWasResult = false;
-    }
+    if (calcLastWasResult && !isNaN(btn.dataset.val)) { calcValue = ''; calcLastWasResult = false; }
     calcValue += btn.dataset.val;
     calcDisplay.value = calcValue;
+    calcHistory.textContent = '';
   });
 });
 
-document.querySelectorAll('.calc-btn-op').forEach(btn => {
+// Fonksiyon tuşları
+document.querySelectorAll('.yaver-btn-fn').forEach(btn => {
   btn.addEventListener('click', () => {
-    const op = btn.dataset.val;
-    if (calcValue === '' && calcDisplay.value !== '') {
-      calcValue = calcDisplay.value;
+    const fn = btn.dataset.val;
+    const val = parseFloat(calcValue) || 0;
+    let result = 0;
+    
+    switch(fn) {
+      case 'sin': result = Math.sin(val * Math.PI / 180); break;
+      case 'cos': result = Math.cos(val * Math.PI / 180); break;
+      case 'tan': result = Math.tan(val * Math.PI / 180); break;
+      case 'log': result = Math.log10(val); break;
+      case 'ln': result = Math.log(val); break;
+      case 'sqrt': result = Math.sqrt(val); break;
+      case 'pow': result = Math.pow(val, 2); break;
+      case 'pi': calcValue = val ? (val * Math.PI).toString() : Math.PI.toString(); calcDisplay.value = calcValue; return;
+      case 'e': calcValue = val ? (val * Math.E).toString() : Math.E.toString(); calcDisplay.value = calcValue; return;
+      case '(': case ')': calcValue += fn; calcDisplay.value = calcValue; return;
     }
     
-    if (op === 'sqrt') {
-      calcDisplay.value = Math.sqrt(parseFloat(calcValue));
-      calcValue = calcDisplay.value;
-      calcLastWasResult = true;
-    } else if (op === '^') {
-      calcDisplay.value = Math.pow(parseFloat(calcValue), 2);
-      calcValue = calcDisplay.value;
-      calcLastWasResult = true;
-    } else if (op === '%') {
-      calcDisplay.value = parseFloat(calcValue) / 100;
-      calcValue = calcDisplay.value;
-      calcLastWasResult = true;
-    } else {
-      calcValue += op;
-      calcDisplay.value = calcValue;
-      calcLastWasResult = false;
-    }
+    calcDisplay.value = result;
+    calcValue = result.toString();
+    calcLastWasResult = true;
   });
 });
 
-if (calcClear) {
-  calcClear.addEventListener('click', () => {
-    calcValue = '';
-    calcDisplay.value = '';
+// Operatör tuşları
+document.querySelectorAll('.yaver-btn-op').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!calcValue && calcDisplay.value) calcValue = calcDisplay.value;
+    calcValue += btn.dataset.val;
+    calcDisplay.value = calcValue;
     calcLastWasResult = false;
+    calcHistory.textContent = '';
   });
-}
+});
 
-if (calcEquals) {
-  calcEquals.addEventListener('click', () => {
-    try {
-      let expression = calcValue;
-      expression = expression.replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-');
-      const result = eval(expression);
-      calcDisplay.value = result;
-      calcValue = result.toString();
-      calcLastWasResult = true;
-    } catch (e) {
-      calcDisplay.value = 'Error';
-      calcValue = '';
-    }
-  });
-}
+// Temizle
+const yaverCalcClear = document.getElementById('calcClear');
+if (yaverCalcClear) yaverCalcClear.addEventListener('click', () => {
+  calcValue = ''; calcDisplay.value = ''; calcLastWasResult = false; calcHistory.textContent = '';
+});
 
-// Keyboard support for calculator
-if (calcModal) {
-  calcModal.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      calcEquals.click();
-    } else if (e.key === 'Escape') {
-      calcModal.classList.remove('active');
-    }
+// Sil (backspace)
+const calcDel = document.getElementById('calcDel');
+if (calcDel) calcDel.addEventListener('click', () => {
+  calcValue = calcValue.slice(0, -1);
+  calcDisplay.value = calcValue;
+});
+
+// Eşittir
+const yaverCalcEquals = document.getElementById('calcEquals');
+if (yaverCalcEquals) yaverCalcEquals.addEventListener('click', () => {
+  try {
+    let expr = calcValue;
+    calcHistory.textContent = calcValue + ' =';
+    expr = expr.replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-');
+    const result = eval(expr);
+    calcDisplay.value = result;
+    calcValue = result.toString();
+    calcLastWasResult = true;
+  } catch { calcDisplay.value = 'Hata'; calcValue = ''; }
+});
+
+// Yüzde
+document.querySelectorAll('.yaver-btn-percent').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const val = parseFloat(calcValue) || 0;
+    calcDisplay.value = val / 100;
+    calcValue = (val / 100).toString();
+    calcLastWasResult = true;
   });
-}
+});
+
+// Klavye
+document.addEventListener('keydown', (e) => {
+  if (!yaverCalc?.classList.contains('active')) return;
+  if (e.key === 'Enter') yaverCalcEquals?.click();
+  else if (e.key === 'Escape') { yaverCalc.classList.remove('active'); yaverCalcToggle?.classList.add('show'); }
+  else if (e.key === 'Backspace') { calcValue = calcValue.slice(0, -1); calcDisplay.value = calcValue; }
+});
 
 document.addEventListener('DOMContentLoaded', init);
