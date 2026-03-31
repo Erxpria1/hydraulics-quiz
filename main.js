@@ -7,8 +7,6 @@ const state = {
   filter: 'all',
   currentLang: 'en',
   showSolutions: false,
-  isSpeaking: false,
-  currentUtterance: null
 };
 
 const elements = {
@@ -91,7 +89,7 @@ function renderQuestion() {
   elements.questionNumber.textContent = `Question ${question.id}`;
   elements.questionExercise.textContent = getExerciseLabel(question.exercise);
   
-  elements.questionText.textContent = question.question[state.currentLang] || question.question.en;
+  elements.questionText.innerHTML = formatContent(question.question[state.currentLang] || question.question.en);
   elements.questionImage.innerHTML = '';
   
   elements.optionsContainer.innerHTML = '';
@@ -107,7 +105,7 @@ function renderQuestion() {
   
   if (isAnswered) {
     elements.solutionContainer.style.display = 'block';
-    elements.solutionText.innerHTML = formatSolution(question.solution[state.currentLang] || question.solution.en);
+    elements.solutionText.innerHTML = formatContent(question.solution[state.currentLang] || question.solution.en);
     elements.showSolutionBtn.textContent = state.currentLang === 'tr' ? 'Çözümü Gizle' : 'Hide Solution';
     state.showSolutions = true;
   } else {
@@ -121,6 +119,18 @@ function renderQuestion() {
   
   updateStats();
   createDots();
+
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false},
+        {left: "\\(", right: "\\)", display: false},
+        {left: "\\[", right: "\\]", display: true}
+      ],
+      throwOnError : false
+    });
+  }
 }
 
 function renderMultipleChoice(question) {
@@ -144,7 +154,7 @@ function renderMultipleChoice(question) {
     
     btn.innerHTML = `
       <span class="option-label">${labels[index]}</span>
-      <span class="option-text">${option}</span>
+      <span class="option-text">${formatContent(option)}</span>
     `;
     
     if (!isAnswered) {
@@ -230,6 +240,14 @@ function checkNumericAnswer(question) {
   renderQuestion();
 }
 
+function formatContent(text) {
+  if (!text) return '';
+  return text
+    .replace(/\n/g, '<br>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\[GIVEN\](.*?)\[\/GIVEN\]/g, '<span class="given-value">$1</span>');
+}
+
 function toggleSolution() {
   const filtered = getFilteredQuestions();
   const question = filtered[state.currentQuestion];
@@ -240,14 +258,20 @@ function toggleSolution() {
     state.showSolutions = false;
   } else {
     elements.solutionContainer.style.display = 'block';
-    elements.solutionText.innerHTML = formatSolution(question.solution[state.currentLang] || question.solution.en);
+    elements.solutionText.innerHTML = formatContent(question.solution[state.currentLang] || question.solution.en);
     elements.showSolutionBtn.textContent = state.currentLang === 'tr' ? 'Çözümü Gizle' : 'Hide Solution';
     state.showSolutions = true;
+    
+    if (window.renderMathInElement) {
+      renderMathInElement(elements.solutionContainer, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false}
+        ],
+        throwOnError : false
+      });
+    }
   }
-}
-
-function formatSolution(solution) {
-  return solution.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 }
 
 function nextQuestion() {
@@ -341,9 +365,7 @@ function speakQuestion() {
   if (!question) return;
   
   stopSpeaking();
-  
   const narration = question.narration?.tr || question.solution?.tr || question.solution?.en;
-  
   speak(narration);
 }
 
@@ -353,69 +375,10 @@ function speakSolution() {
   if (!question || state.answers[question.id] === undefined) return;
   
   stopSpeaking();
-  
   const narration = question.narration?.tr || question.solution?.tr || question.solution?.en;
-  
   speak(narration);
 }
 
-function generateQuestionNarrative(question, questionText) {
-  const lang = state.currentLang;
-  
-  let narrative = questionText + '. ';
-  
-  if (question.type === 'multiple') {
-    const options = question.options[lang] || question.options.en;
-    const labels = lang === 'tr' ? ['Birinci şık', 'İkinci şık', 'Üçüncü şık', 'Dördüncü şık'] : ['Option A', 'Option B', 'Option C', 'Option D'];
-    
-    narrative += lang === 'tr' ? 'Seçenekler: ' : 'Options: ';
-    options.forEach((opt, i) => {
-      narrative += labels[i] + ': ' + opt + '. ';
-    });
-  } else if (question.type === 'numeric') {
-    if (question.unit) {
-      narrative += lang === 'tr' ? `Cevabınızı ${question.unit} biriminde giriniz.` : `Enter your answer in ${question.unit}.`;
-    }
-  }
-  
-  return narrative;
-}
-
-function generateSolutionNarrative(question, solutionText) {
-  const lang = state.currentLang;
-  
-  let narrative = '';
-  
-  if (lang === 'tr') {
-    narrative = 'Bu sorunun çözümünü anlatıyorum. ';
-  } else {
-    narrative = 'I will explain the solution to this question. ';
-  }
-  
-  narrative += solutionText + '. ';
-  
-  if (question.type === 'multiple') {
-    const options = question.options[lang] || question.options.en;
-    const correctOption = options[question.correct];
-    const labels = lang === 'tr' ? ['birinci şık', 'ikinci şık', 'üçüncü şık', 'dördüncü şık'] : ['option A', 'option B', 'option C', 'option D'];
-    
-    if (lang === 'tr') {
-      narrative += `Doğru cevap ${labels[question.correct]} yani ${correctOption} seçeneğidir.`;
-    } else {
-      narrative += `The correct answer is ${labels[question.correct]}, which is ${correctOption}.`;
-    }
-  } else if (question.type === 'numeric') {
-    if (lang === 'tr') {
-      narrative += `Doğru cevap ${question.answer} ${question.unit || 'birim'}`;
-    } else {
-      narrative += `The correct answer is ${question.answer} ${question.unit || 'units'}`;
-    }
-  }
-  
-  return narrative;
-}
-
-let currentText = '';
 let isPaused = false;
 
 function speak(text) {
@@ -442,7 +405,6 @@ function speak(text) {
   
   synth.cancel();
   isPaused = false;
-  currentText = text;
   
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'tr-TR';
@@ -484,7 +446,7 @@ function updateAudioButtons() {
   const isSpeaking = window.speechSynthesis.speaking;
   
   if (elements.hoporlorBtn) {
-    elements.hoporlorBtn.innerHTML = isSpeaking ? '⏹ DUR' : '🎧 HOPORLOR';
+    elements.hoporlorBtn.innerHTML = isSpeaking ? '⏹ HOPORLOR' : '🎧 HOPORLOR';
     elements.hoporlorBtn.classList.toggle('playing', isSpeaking);
   }
   if (elements.audioBtn) {
