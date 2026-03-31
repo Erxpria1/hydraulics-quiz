@@ -15,6 +15,9 @@ const questions = [
     solution: {
       en: "Force F = ma, so dimension is [M][L][T]⁻² = MLT⁻²",
       tr: "Kuvvet F = ma, boyut [M][L][T]⁻² = MLT⁻²"
+    },
+    narration: {
+      tr: "Bu soruda, MLT sisteminde kuvvetin boyutunun ne olduğunu soruyor. Hatırlayalım, kuvvet kütlesi ile ivmenin çarpımına eşittir. Kütlenin boyutu M, uzunluğun boyutu L, zamanın boyutu T'dir. İvme de hızın zamana göre değişimi olduğuna göre, boyutları bir araya getirdiğimizde M L T üssü eksi iki elde ederiz. Yani doğru cevap birinci şık, M L T üssü eksi ikidir. Diğer şıklar incelendiğinde, ikinci şık hareket, üçüncü şık enerji, dördüncü şık ise iş olarak karşımıza çıkar."
     }
   },
   {

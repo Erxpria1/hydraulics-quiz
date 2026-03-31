@@ -342,10 +342,9 @@ function speakQuestion() {
   
   stopSpeaking();
   
-  const solutionText = question.solution[state.currentLang] || question.solution.en;
-  const narrative = generateSolutionNarrative(question, solutionText);
+  const narration = question.narration?.tr || question.solution?.tr || question.solution?.en;
   
-  speak(narrative, 'tr');
+  speak(narration);
 }
 
 function speakSolution() {
@@ -355,10 +354,9 @@ function speakSolution() {
   
   stopSpeaking();
   
-  const solutionText = question.solution[state.currentLang] || question.solution.en;
-  const narrative = generateSolutionNarrative(question, solutionText);
+  const narration = question.narration?.tr || question.solution?.tr || question.solution?.en;
   
-  speak(narrative, 'tr');
+  speak(narration);
 }
 
 function generateQuestionNarrative(question, questionText) {
