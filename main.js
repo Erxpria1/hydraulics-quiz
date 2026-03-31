@@ -87,7 +87,7 @@ function renderQuestion() {
   elements.progressBar.style.width = `${(answeredCount / filtered.length) * 100}%`;
   elements.progressText.textContent = `${answeredCount} / ${filtered.length}`;
   
-  elements.questionNumber.textContent = `Q${question.id}`;
+  elements.questionNumber.textContent = `Q${state.currentQuestion + 1}`;
   elements.questionExercise.textContent = getExerciseLabel(question.exercise);
   elements.questionText.innerHTML = formatContent(question.question[state.currentLang] || question.question.en);
   
@@ -105,7 +105,7 @@ function renderQuestion() {
     state.showSolutions = true;
   } else {
     elements.solutionContainer.style.display = 'none';
-    elements.showSolutionBtn.textContent = state.currentLang === 'tr' ? 'Çözüm' : 'Solution';
+    elements.showSolutionBtn.textContent = state.currentLang === 'tr' ? 'Çözümü Göster' : 'Show Solution';
     state.showSolutions = false;
   }
   
@@ -115,6 +115,8 @@ function renderQuestion() {
   updateStats();
   createDots();
   triggerKaTeX();
+  updateButtonTexts();
+  updateFilterTabTexts();
 }
 
 function renderMultipleChoice(question) {
@@ -133,6 +135,44 @@ function renderMultipleChoice(question) {
     if (!isAnswered) btn.addEventListener('click', () => selectAnswer(index));
     elements.optionsContainer.appendChild(btn);
   });
+}
+
+function renderNumeric(question) {
+  elements.numericAnswer.style.display = 'flex';
+  elements.unitDisplay.textContent = question.unit || '';
+  elements.numericInput.value = '';
+  elements.numericInput.focus();
+  
+  elements.numericInput.onkeydown = (e) => {
+    if (e.key === 'Enter') checkNumericAnswer();
+  };
+  
+  elements.checkNumeric.onclick = checkNumericAnswer;
+}
+
+function checkNumericAnswer() {
+  const q = getFilteredQuestions()[state.currentQuestion];
+  if (state.answers[q.id]) return;
+  
+  const userAnswer = parseFloat(elements.numericInput.value);
+  if (isNaN(userAnswer)) return;
+  
+  const tolerance = q.tolerance || 0.01;
+  const correctAnswer = q.answer;
+  const isCorrect = Math.abs(userAnswer - correctAnswer) <= Math.abs(correctAnswer * tolerance);
+  
+  state.answers[q.id] = { selected: userAnswer, correct: isCorrect };
+  if (isCorrect) { state.correct++; state.score += 5; } else state.wrong++;
+  
+  const label = document.querySelector('label[for="numericInput"]');
+  if (label) {
+    label.style.color = isCorrect ? 'var(--correct)' : 'var(--wrong)';
+    label.textContent = isCorrect 
+      ? (state.currentLang === 'tr' ? '✓ Doğru!' : '✓ Correct!')
+      : (state.currentLang === 'tr' ? `✗ Doğru cevap: ${correctAnswer}` : `✗ Correct answer: ${correctAnswer}`);
+  }
+  
+  renderQuestion();
 }
 
 function formatContent(text) {
@@ -198,10 +238,10 @@ function stopSpeaking() {
 function updateAudioButtons() {
   if (elements.hoporlorBtn) {
     if (state.speakingType === 'question') {
-      elements.hoporlorBtn.innerHTML = isPaused ? '▶ DEVAM' : '⏸ DUR';
+      elements.hoporlorBtn.textContent = isPaused ? (state.currentLang === 'tr' ? '▶ Devam' : '▶ Resume') : (state.currentLang === 'tr' ? '⏸ Dur' : '⏸ Pause');
       elements.hoporlorBtn.classList.toggle('playing', !isPaused);
     } else {
-      elements.hoporlorBtn.innerHTML = '🎧 DİNLE';
+      elements.hoporlorBtn.textContent = state.currentLang === 'tr' ? '🎧 Dinle' : '🎧 Listen';
       elements.hoporlorBtn.classList.remove('playing');
     }
   }
@@ -231,16 +271,52 @@ function prevQuestion() { stopSpeaking(); if (state.currentQuestion > 0) { state
 function goToQuestion(index) { state.currentQuestion = index; renderQuestion(); }
 function updateStats() { elements.scoreDisplay.textContent = state.score; elements.correctCount.textContent = state.correct; elements.wrongCount.textContent = state.wrong; }
 function getExerciseLabel(ex) { 
-  const labels = { ex1: 'Boyutsal Analiz', ex2: 'Model Teorisi', ex3: 'Kapalı Borular' };
+  const labels = { 
+    ex1: state.currentLang === 'tr' ? 'Boyutsal Analiz' : 'Dimensional Analysis',
+    ex2: state.currentLang === 'tr' ? 'Model Teorisi' : 'Model Theory',
+    ex3: state.currentLang === 'tr' ? 'Kapalı Borular' : 'Closed Conduit'
+  };
   return labels[ex] || ex;
+}
+
+function updateButtonTexts() {
+  elements.prevBtn.textContent = state.currentLang === 'tr' ? '← Önceki' : '← Previous';
+  elements.nextNavBtn.textContent = state.currentLang === 'tr' ? 'Sonraki →' : 'Next →';
+}
+
+function updateFilterTabTexts() {
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  filterBtns.forEach(btn => {
+    const filter = btn.dataset.filter;
+    const lang = state.currentLang;
+    if (filter === 'all') btn.textContent = lang === 'tr' ? 'Tümü' : 'All';
+    else if (filter === 'ex1') btn.textContent = lang === 'tr' ? 'Soru I: Boyutsal' : 'Ex I: Dimensional';
+    else if (filter === 'ex2') btn.textContent = lang === 'tr' ? 'Soru II: Model' : 'Ex II: Model';
+    else if (filter === 'ex3') btn.textContent = lang === 'tr' ? 'Soru III: Boru' : 'Ex III: Pipe';
+  });
 }
 
 function setupEventListeners() {
   elements.prevBtn.addEventListener('click', prevQuestion);
   elements.nextBtn.addEventListener('click', nextQuestion);
+  elements.nextNavBtn.addEventListener('click', nextQuestion);
   elements.showSolutionBtn.addEventListener('click', toggleSolution);
   elements.langToggle.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => { state.currentLang = btn.dataset.lang; renderQuestion(); });
+    btn.addEventListener('click', () => {
+      state.currentLang = btn.dataset.lang;
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderQuestion();
+    });
+  });
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.filter = btn.dataset.filter;
+      state.currentQuestion = 0;
+      renderQuestion();
+    });
   });
   if (elements.hoporlorBtn) {
     elements.hoporlorBtn.addEventListener('click', () => {
