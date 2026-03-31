@@ -398,43 +398,72 @@ header {
   padding: 20px 24px;
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.08);
+  position: relative;
 }
 
 .question-text .katex {
   font-size: 1.2em;
-  color: #a78bfa;
+  color: #f97316;
   padding: 0 4px;
-  background: rgba(139, 92, 246, 0.1);
+  background: rgba(249, 115, 22, 0.15);
   border-radius: 4px;
   font-family: 'Fira Code', 'JetBrains Mono', monospace;
+  text-shadow: 0 0 8px rgba(249, 115, 22, 0.5);
 }
 
 .question-text .katex-display {
   margin: 16px 0;
   padding: 16px;
-  background: rgba(6, 182, 212, 0.08);
+  background: linear-gradient(135deg, rgba(234, 88, 12, 0.1), rgba(194, 65, 12, 0.05));
   border-radius: 12px;
-  border-left: 3px solid #06b6d4;
+  border-left: 3px solid #f97316;
+  border-right: 3px solid #f97316;
   overflow-x: auto;
   font-family: 'Fira Code', 'JetBrains Mono', monospace;
+  animation: fireGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes fireGlow {
+  from { box-shadow: 0 0 5px rgba(249, 115, 22, 0.3); }
+  to { box-shadow: 0 0 20px rgba(249, 115, 22, 0.6); }
 }
 
 .question-text .katex-display .katex {
-  color: #22d3ee;
+  color: #fb923c;
   font-size: 1.1em;
 }
 
 .question-text em {
-  color: #f472b6;
+  color: #22d3ee;
   font-style: normal;
-  background: rgba(244, 114, 182, 0.1);
+  background: rgba(34, 211, 238, 0.15);
   padding: 2px 6px;
   border-radius: 4px;
+  text-shadow: 0 0 6px rgba(34, 211, 238, 0.4);
 }
 
 .question-text strong {
-  color: #fbbf24;
+  color: #f472b6;
   font-weight: 700;
+  text-shadow: 0 0 8px rgba(244, 114, 182, 0.5);
+}
+
+.question-text .mord.text {
+  color: #fbbf24 !important;
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+}
+
+.question-text .mord.numbers {
+  color: #4ade80 !important;
+  font-weight: 700;
+  text-shadow: 0 0 12px rgba(74, 222, 128, 0.7);
+}
+
+.question-text .mord.metric {
+  color: #a78bfa !important;
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(167, 139, 250, 0.5);
 }
 
 .header-tools {
@@ -671,54 +700,146 @@ header {
 
 .solution-text .katex {
   font-size: 1.15em;
-  color: #a78bfa;
-  background: rgba(139, 92, 246, 0.1);
+  color: #f97316;
+  background: rgba(249, 115, 22, 0.15);
   padding: 2px 6px;
   border-radius: 4px;
   font-family: 'Fira Code', 'JetBrains Mono', monospace;
+  text-shadow: 0 0 8px rgba(249, 115, 22, 0.5);
+  animation: firePulse 2s ease-in-out infinite;
 }
 
 .solution-text .katex-display {
   margin: 16px 0;
   padding: 18px 20px;
-  background: rgba(6, 182, 212, 0.08);
+  background: linear-gradient(135deg, rgba(234, 88, 12, 0.12), rgba(194, 65, 12, 0.05));
   border-radius: 12px;
-  border-left: 3px solid #06b6d4;
+  border-left: 3px solid #f97316;
+  border-right: 3px solid #f97316;
   overflow-x: auto;
   font-family: 'Fira Code', 'JetBrains Mono', monospace;
+  animation: fireGlow 2s ease-in-out infinite alternate;
 }
 
 .solution-text .katex-display .katex {
-  color: #22d3ee;
+  color: #fb923c;
   font-size: 1.1em;
   background: transparent;
   padding: 0;
+  text-shadow: 0 0 10px rgba(251, 146, 60, 0.6);
 }
 
-/* ===== KATEX ===== */
+/* ===== KATEX - Ateş/İhya Tema ===== */
 .katex { 
-  font-size: 1.15em !important; 
-  color: #a78bfa; 
-  background: rgba(139, 92, 246, 0.1);
-  padding: 2px 6px;
+  font-size: 1.25em !important; 
+  color: #f97316 !important; 
+  background: rgba(249, 115, 22, 0.15);
+  padding: 2px 8px;
   border-radius: 4px;
   font-family: 'Fira Code', 'JetBrains Mono', monospace;
+  text-shadow: 0 0 8px rgba(249, 115, 22, 0.5);
+  animation: firePulse 2s ease-in-out infinite;
 }
+
+@keyframes firePulse {
+  0%, 100% { text-shadow: 0 0 8px rgba(249, 115, 22, 0.5); }
+  50% { text-shadow: 0 0 15px rgba(249, 115, 22, 0.8), 0 0 25px rgba(249, 115, 22, 0.4); }
+}
+
 .katex-display { 
-  background: rgba(6, 182, 212, 0.08); 
-  padding: 18px 24px; 
+  background: linear-gradient(135deg, rgba(234, 88, 12, 0.12), rgba(194, 65, 12, 0.05)); 
+  padding: 20px 28px; 
   border-radius: 12px;
-  margin: 16px 0; 
-  border-left: 3px solid #06b6d4;
+  margin: 18px 0; 
+  border-left: 4px solid #f97316;
+  border-right: 4px solid #ea580c;
   overflow-x: auto;
   font-family: 'Fira Code', 'JetBrains Mono', monospace;
+  animation: fireGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes fireGlow {
+  from { box-shadow: 0 0 5px rgba(249, 115, 22, 0.3); }
+  to { box-shadow: 0 0 20px rgba(249, 115, 22, 0.6); }
 }
 
 .katex-display .katex {
-  color: #22d3ee;
-  font-size: 1.15em;
+  color: #fb923c !important;
+  font-size: 1.2em;
   background: transparent;
   padding: 0;
+  text-shadow: 0 0 10px rgba(251, 146, 60, 0.6);
+}
+
+/* KaTeX number coloring - Farklı renkler */
+.katex-display .mord.text {
+  color: #fbbf24 !important;
+  font-weight: 600;
+  font-size: 1.3em;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+}
+
+.katex-display .mord.numbers {
+  color: #4ade80 !important;
+  font-weight: 700;
+  font-size: 1.4em;
+  text-shadow: 0 0 12px rgba(74, 222, 128, 0.7);
+}
+
+.katex-display .mord.metric {
+  color: #a78bfa !important;
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(167, 139, 250, 0.5);
+}
+
+/* Numbers in inline math */
+.katex .mord.numbers {
+  color: #4ade80;
+  font-weight: 700;
+  text-shadow: 0 0 6px rgba(74, 222, 128, 0.5);
+}
+
+/* Unit styling */
+.katex-display .mbin + .mord, 
+.katex-display .mrel + .mord {
+  color: #f472b6;
+  text-shadow: 0 0 8px rgba(244, 114, 182, 0.5);
+}
+
+/* Greek letters */
+.katex-display .malpha,
+.katex-display .mbeta,
+.katex-display .mgamma,
+.katex-display .mmu {
+  color: #fb923c;
+  text-shadow: 0 0 8px rgba(251, 146, 60, 0.5);
+}
+
+/* Subscript and superscript */
+.katex-display .mord.msubsup,
+.katex-display .mord.msup {
+  color: #34d399;
+  font-size: 0.9em;
+  text-shadow: 0 0 6px rgba(52, 211, 153, 0.5);
+}
+.katex-display .mbin + .mord, 
+.katex-display .mrel + .mord {
+  color: #f472b6;
+}
+
+/* Greek letters */
+.katex-display .malpha,
+.katex-display .mbeta,
+.katex-display .mgamma,
+.katex-display .mmu {
+  color: #a78bfa;
+}
+
+/* Subscript and superscript */
+.katex-display .mord.msubsup,
+.katex-display .mord.msup {
+  color: #34d399;
+  font-size: 0.9em;
 }
 
 /* ===== ACTION BUTTONS ===== */
