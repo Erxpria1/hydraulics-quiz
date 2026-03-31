@@ -154,20 +154,22 @@ const questions = [
   {
     id: 9,
     exercise: "ex3",
-    type: "numeric",
+    type: "multiple",
     question: {
-      en: "A sphere of diameter 2 mm falls through oil. At terminal velocity, the drag coefficient C_D = 1.17 and the Reynolds number Re = 0.94. Find the density ratio (ρ_s/ρ_f) given: μ = 0.1 Pa·s, ρ_f = 900 kg/m³, g = 9.81 m/s², V_t = 0.052 m/s",
-      tr: "2 mm çaplı bir küre yağdan düşüyor. Terminal hızda, C_D = 1.17 ve Re = 0.94. Yoğunluk oranını (ρ_s/ρ_f) bulun. Verilenler: μ = 0.1 Pa·s, ρ_f = 900 kg/m³, g = 9.81 m/s², V_t = 0.052 m/s"
+      en: "Which law is used to calculate the terminal velocity of a 2 mm sphere falling through oil? Given: Re = 0.94 (laminar flow)",
+      tr: "2 mm kürenin yağdaki terminal hızını hesaplamak için hangi yasa kullanılır? Verilen: Re = 0.94 (laminer akış)"
     },
-    unit: "",
-    answer: 8.89,
-    tolerance: 0.05,
+    options: {
+      en: ["Stokes' Law", "Newton's Law", "Bernoulli's Equation", "Darcy-Weisbach"],
+      tr: ["Stokes Yasası", "Newton Yasası", "Bernoulli Denklemi", "Darcy-Weisbach"]
+    },
+    correct: 0,
     solution: {
-      en: "**Solution:**\n\nGiven:\n- $D = 2$ mm $= 0.002$ m\n- $C_D = 1.17$\n- $Re = 0.94$\n- $\\mu = 0.1$ Pa·s\n- $\\rho_f = 900$ kg/m³\n- $g = 9.81$ m/s²\n- $V_t = 0.052$ m/s\n\n**From Newton's Law:**\n$$V_t = \\sqrt{\\frac{4gD(\\rho_s - \\rho_f)}{3C_D \\rho_f}}$$\n\nSquaring both sides:\n$$V_t^2 = \\frac{4gD(\\rho_s - \\rho_f)}{3C_D \\rho_f}$$\n\n$$\\rho_s - \\rho_f = \\frac{3C_D \\rho_f V_t^2}{4gD}$$\n\n$$\\rho_s = \\frac{3 \\times 1.17 \\times 900 \\times (0.052)^2}{4 \\times 9.81 \\times 0.002} + 900$$\n\n$$\\rho_s = \\frac{3 \\times 1.17 \\times 900 \\times 0.0027}{0.0785} + 900$$\n\n$$\\rho_s = \\frac{8.53}{0.0785} + 900 = 108.7 + 900 = 1008.7 \\text{ kg/m}^3$$\n\n**Density ratio:**\n$$\\frac{\\rho_s}{\\rho_f} = \\frac{1008.7}{900} = 1.12$$\n\n**Using Stokes' Law check:**\n$$\\rho_s = \\frac{18\\mu V_t}{gD^2} + \\rho_f = \\frac{18 \\times 0.1 \\times 0.052}{9.81 \\times 4 \\times 10^{-6}} + 900$$\n\n$$\\rho_s = \\frac{0.0936}{3.92 \\times 10^{-5}} + 900 = 2388 + 900 = 3288 \\text{ kg/m}^3$$\n\n$$\\frac{\\rho_s}{\\rho_f} = \\frac{3288}{900} = 3.65$$\n\n**Corrected answer using given Re:**\n$$\\frac{\\rho_s}{\\rho_f} \\approx 8.89$$",
-      tr: "**Çözüm:**\n\nVerilenler:\n- $D = 0.002$ m, $C_D = 1.17$, $Re = 0.94$\n- $\\mu = 0.1$ Pa·s, $\\rho_f = 900$ kg/m³\n- $g = 9.81$ m/s², $V_t = 0.052$ m/s\n\nNewton yasasından:\n$$\\frac{\\rho_s}{\\rho_f} \\approx 8.89$$"
+      en: "**Stokes' Law** is used for low Reynolds number flow (Re < 1).\n\nFor the 2 mm sphere:\n$$Re = 0.94 < 1$$\n\nTherefore, **Stokes' Law** applies:\n$$V_t = \\frac{gD^2(\\rho_s - \\rho_f)}{18\\mu}$$\n\n**Why not Newton's Law?**\nNewton's Law requires higher Re (typically Re > 1000):\n$$V_t = \\sqrt{\\frac{4gD(\\rho_s - \\rho_f)}{3C_D \\rho_f}}$$\n\n**Why Stokes' Law?**\n- Low Reynolds number (Re = 0.94)\n- Small sphere diameter (2 mm)\n- Laminar flow conditions\n\n**Answer: Stokes' Law** ✓",
+      tr: "**Stokes Yasası** düşük Reynolds sayılı akış için kullanılır (Re < 1).\n\n2 mm küre için:\n$$Re = 0.94 < 1$$\n\nBu nedenle **Stokes Yasası** uygulanır:\n$$V_t = \\frac{gD^2(\\rho_s - \\rho_f)}{18\\mu}$$\n\n**Neden Newton Yasası değil?**\nNewton Yasası daha yüksek Re gerektirir (tipik olarak Re > 1000).\n\n**Cevap: Stokes Yasası** ✓"
     },
     narration: {
-      tr: "Bu soruda yoğunluk oranını hesaplamak için Newton yasasını kullanıyoruz. Verilen sürükleme katsayısı ve Reynolds sayısından yola çıkarak yoğunluk oranını buluyoruz."
+      tr: "Bu soruda 2 mm kürenin terminal hızını hesaplamak için hangi yasanın kullanılacağını soruyor. Düşük Reynolds sayısı (0.94) laminer akış koşullarını gösterir ve bu durumda Stokes Yasası geçerlidir."
     }
   },
   {
