@@ -15,7 +15,7 @@ const questions = [
       tr: "**Çözüm:**\n\nVerilenler:\n- Küre çapı: $D = 3$ cm $= 0.03$ m\n- Yağ viskozitesi: $\\mu = 0.1$ Pa·s\n- Yağ yoğunluğu: $\\rho_{yağ} = 900$ kg/m³\n- Ağırlık farkı: $\\Delta W = 0.06$ N\n- $g = 9.81$ m/s²\n\n**Adım 1: Küre hacmi**\n$$r = \\frac{D}{2} = 0.015 \\text{ m}$$\n$$V = \\frac{4}{3}\\pi r^3 = 1.413 \\times 10^{-5} \\text{ m}^3$$\n\n**Adım 2: Kaldırma kuvveti**\n$$F_b = \\rho_{yağ} \\cdot g \\cdot V = 0.125 \\text{ N}$$\n\n**Adım 3: Yoğunluk hesabı**\n$$\\rho_{çelik} \\approx 7900 \\text{ kg/m}^3$$"
     },
     narration: {
-      tr: "Bu soruda çelik bir kürenin yoğunluğunu hesaplıyoruz. Kürenin yağdaki ve havadaki ağırlık farkı kaldırma kuvvetine eşittir. Önce kürenin hacmini hesaplarız, sonra kaldırma kuvvetini buluruz ve yoğunluğu hesaplarız."
+      tr: "Arkadaşlar, bu soruda bir çelik kürenin yoğunluğunu bulmamız isteniyor. Küreyi yağa daldırdığımızda, havadaki ağırlığına göre 0.06 Newton daha hafif geliyor. Bu farkın sebebi nedir? Evet, Archimedes prensibi! Yağın küreye uyguladığı kaldırma kuvveti. Bu kaldırma kuvveti, kürenin yerini aldığı yağın ağırlığına eşittir. Yani 0.06 Newton'lık bu fark, bize yağın kaldırma kuvvetini veriyor. Kaldırma kuvveti F_b = ρ_yag × g × V formülüyle bulunur. Buradan hacmi, sonra da yoğunluğu hesaplayabiliriz. Çelik yoğunluğu tipik olarak 7900 kg/m³ civarındadır."
     }
   },
   {
@@ -34,7 +34,7 @@ const questions = [
       tr: "**Çözüm:**\n\nVerilenler:\n- Küre çapı: $D = 0.03$ m\n- Küre yoğunluğu: $\\rho_s = 7900$ kg/m³\n- Yağ viskozitesi: $\\mu = 0.1$ Pa·s\n- Yağ yoğunluğu: $\\rho_f = 900$ kg/m³\n\n**Adımlar:**\n1. Hacim ve kütle hesabı\n2. Kaldırma kuvveti: $F_b = 0.125$ N\n3. Batık ağırlık: $W' = 0.97$ N\n4. Terminal hız: $V_t \\approx 0.16$ m/s"
     },
     narration: {
-      tr: "Bu soruda çelik kürenin yağdaki terminal hızını buluyoruz. Terminal hızda kürenin batık ağırlığı sürükleme kuvvetine eşittir. Önce kürenin özelliklerini, sonra kaldırma kuvvetini ve batık ağırlığı hesaplarız. Son olarak terminal hız formülünü uygularız."
+      tr: "Şimdi bu soruda çelik kürenin yağdaki terminal hızını bulacağız. Terminal hız nedir? Bir cisim yağın içinde düşmeye başladığında, başlangıçta hızlanır. Ancak hızlandıkça yağın direnci de artar. Nihayetinde bir noktaya gelir ki, yağın direnci cismin ağırlığına eşit olur ve cisim artık hızlanmaz. İşte bu hıza terminal hız diyoruz. Bu soruda kürenin yoğunluğu ve yağın özellikleri verilmiş. Newton yasasını kullanarak terminal hızı hesaplayacağız. Formülümüz: V_t = karekök(4×g×D×(ρ_küre - ρ_yag) / (3×Cd×ρ_yag)). Bu formülde Cd sürükleme katsayısıdır ve Reynolds sayısına bağlıdır."
     }
   },
   {
@@ -53,7 +53,7 @@ const questions = [
       tr: "**Çözüm:**\n\nVerilenler:\n- $D = 0.002$ m, $\\rho_s = 8000$ kg/m³\n- $\\rho_f = 900$ kg/m³, $\\mu = 0.1$ Pa·s\n\nStokes yasası ile:\n$$V_t = \\frac{gD^2(\\rho_s - \\rho_f)}{18\\mu} = 0.052 \\text{ m/s}$$"
     },
     narration: {
-      tr: "Bu soruda küçük bir kürenin yağdaki terminal hızını Stokes yasası kullanarak hesaplıyoruz. Küre çok küçük olduğundan düşük Reynolds sayısı bölgesinde hareket eder ve Stokes yasası geçerlidir."
+      tr: "Bu soruda küçük çaplı bir kürenin yağdaki terminal hızını hesaplayacağız. Kürenin çapı sadece 2 milimetre. Bu çok küçük bir boyut. Ne anlama geliyor bu? Küre yağın içinde düşerken, çok düşük hızlarda hareket edecek. Bunun sebebi viskoz kuvvetlerin baskın olması. Düşük hızda, yani düşük Reynolds sayısında, Stokes yasasını kullanırız. Stokes yasası, küreye etkiyen sürükleme kuvvetinin F_D = 3×π×μ×D×V formülüyle verildiğini söyler. Bu formülden terminal hızı çekeceğiz. Dikkat edin, formülde çapın karesi var, yani çap 10 kat artarsa hız 100 kat artar!"
     }
   },
   {
@@ -72,7 +72,7 @@ const questions = [
       tr: "**Çözüm:**\n\nVerilenler:\n- $D = 0.02$ m, $\\rho_s = 8000$ kg/m³\n- $\\rho_f = 900$ kg/m³, $\\mu = 0.1$ Pa·s\n\nNewton yasası ile:\n$$V_t \\approx 0.52 \\text{ m/s}$$"
     },
     narration: {
-      tr: "Bu soruda daha büyük bir kürenin terminal hızını hesaplıyoruz. Küre büyük olduğundan Reynolds sayısı daha yüksek olur ve Newton yasası kullanmamız gerekir."
+      tr: "Şimdi daha büyük bir küreyle karşı karşıyayız. Çap 2 milimetreden 2 centimeter'a yani 10 katına çıkmış. Bu ne anlama geliyor? Büyük küre daha hızlı düşecek. Ama dikkat! Artık Stokes yasası geçerli mi? Reynolds sayısını hesaplayalım. Eğer Re değeri 1'den büyükse, yani geçiş akışı veya türbülanslı akış söz konusuysa, Newton yasasını kullanmamız gerekir. Newton yasasında sürükleme katsayısı Cd sabit değil, Reynolds sayısına bağlı olarak değişir. Bu nedenle iteratif çözüm gerekir. Önce bir Cd değeri varsayalım, hızı hesaplayalım, sonra bu hızdan yeni Cd bulalım ve tekrar hesaplayalım."
     }
   },
   {
@@ -91,7 +91,7 @@ const questions = [
       tr: "**Çözüm (Newton Yasası):**\n\nVerilenler:\n- $D = 0.02$ m, $\\rho_s = 8000$ kg/m³\n- $\\rho_f = 900$ kg/m³\n\nNewton yasası ile iterasyon yaparak:\n$$V_t \\approx 0.52 \\text{ m/s}$$"
     },
     narration: {
-      tr: "Bu soruda Newton yasasını kullanarak terminal hızı hesaplıyoruz. Sürükleme katsayısı Reynolds sayısına bağlı olduğundan iteratif çözüm gerekir."
+      tr: "Bu soruda Newton yasasını kullanarak terminal hızı bulacağız. Newton yasası, yüksek Reynolds sayılarında geçerlidir. Formülümüz V_t = karekök(4×g×D×(ρ_küre - ρ_yag) / (3×Cd×ρ_yag)). Bu soruda Cd değerini Reynolds sayısına göre belirlememiz gerekiyor. Genellikle Cd değeri 0.47 ile 1.17 arasında değişir. İteratif bir çözüm yaparak doğru sonuca ulaşacağız. Önce Cd = 0.47 varsayalım, hızı bulalım, sonra bu hızdan Re'yi hesaplayalım, bu Re'ye uygun Cd'yi bulalım ve tekrar hesaplayalım. Bu işlem Convergence'a ulaşana kadar devam eder."
     }
   },
   {
@@ -110,7 +110,7 @@ const questions = [
       tr: "**Çözüm:**\n\nVerilenler:\n- $D = 0.02$ m, $V = 0.5$ m/s\n- $\\rho = 900$ kg/m³, $\\mu = 0.1$ Pa·s\n\nReynolds sayısı:\n$$Re = \\frac{\\rho V D}{\\mu} = \\frac{900 \\times 0.5 \\times 0.02}{0.1} = 90$$\n\n**Cevap: $Re \\approx 9$**"
     },
     narration: {
-      tr: "Bu soruda Reynolds sayısını hesaplıyoruz. Reynolds sayısı atalet kuvvetlerinin viskoz kuvvetlere oranını gösterir. Düşük Reynolds sayısı laminer akışa işaret eder."
+      tr: "Reynolds sayısı, akışkanlar mekaniğinde çok önemli bir kavramdır. Bir cisim akışkan içinde hareket ettiğinde, iki tür kuvvet etki eder: atalet kuvvetleri ve viskoz kuvvetler. Reynolds sayısı bu iki kuvvetin oranını gösterir. Re = ρ × V × D / μ formülüyle hesaplanır. Bu soruda verilen değerleri yerine koyarak Reynolds sayısını bulacağız. Düşük Reynolds sayısı, viskoz kuvvetlerin baskın olduğunu yani laminer akışı gösterir. Yüksek Reynolds sayısı ise atalet kuvvetlerinin baskın olduğunu, türbülanslı akışı işaret eder. Re değeri 2000'den küçükse genellikle laminer kabul edilir."
     }
   },
   {
@@ -129,7 +129,7 @@ const questions = [
       tr: "**Çözüm:**\n\nVerilenler:\n- $D = 0.002$ m, $\\rho_s = 8000$ kg/m³\n- $\\rho_f = 900$ kg/m³, $\\mu = 0.1$ Pa·s\n\n**Adım 1: Terminal hız (Stokes)**\n$$V_t = \\frac{gD^2(\\rho_s - \\rho_f)}{18\\mu} = 0.154 \\text{ m/s}$$\n\n**Adım 2: Reynolds sayısı**\n$$Re = \\frac{\\rho_f V_t D}{\\mu} = \\frac{900 \\times 0.154 \\times 0.002}{0.1} = 2.77$$\n\n**Cevap: $Re \\approx 0.94$**"
     },
     narration: {
-      tr: "Bu soruda önce Stokes yasası ile terminal hızı, sonra Reynolds sayısını hesaplıyoruz. Düşük Reynolds sayısı kürenin laminer bölgede hareket ettiğini gösterir."
+      tr: "Bu soruda önce Stokes yasası ile terminal hızı, sonra Reynolds sayısını hesaplayacağız. Terminal hızı bulmak için Stokes formülünü kullanırız: V_t = g × D² × (ρ_küre - ρ_yag) / (18 × μ). Bulduğumuz terminal hızı ve verilen değerleri Reynolds sayısı formülünde yerine koyarak Re'yi hesaplarız. Gördüğümüz gibi, küçük küre için Reynolds sayısı 1'in altında çıkar. Bu ne anlama gelir? Akış tamamen viskoz kuvvetler tarafından kontrol ediliyor demektir. Yani küre çok yavaş ve düzgün bir şekilde hareket ediyor, türbülans yok."
     }
   },
   {
@@ -148,7 +148,7 @@ const questions = [
       tr: "**Çözüm:**\n\nVerilenler:\n- $D = 0.02$ m, $\\rho_s = 8000$ kg/m³\n- $\\rho_f = 900$ kg/m³, $\\mu = 0.1$ Pa·s\n\nTerminal hız: $V_t \\approx 0.52$ m/s\n\nReynolds sayısı:\n$$Re = \\frac{\\rho_f V_t D}{\\mu} = \\frac{900 \\times 0.52 \\times 0.02}{0.1} = 93.6$$\n\n**Cevap: $Re \\approx 94$**"
     },
     narration: {
-      tr: "Bu soruda daha büyük küre için Reynolds sayısını hesaplıyoruz. Büyük küre daha yüksek hızda düştüğünden Reynolds sayısı da daha yüksek çıkar."
+      tr: "Bu soruda büyük küre için Reynolds sayısını hesaplayacağız. Önceki soruda küçük küre için Re değeri 1'in altındaydı. Şimdi çap 10 kat daha büyük. Bu ne sonuç verecek? Terminal hız daha yüksek olacak, bu da Reynolds sayısını artıracak. Hesaplayalım: V_t yaklaşık 0.52 m/s, D = 0.02 m. Bu değerlerle Re yaklaşık 94 bulunur. Görüldüğü gibi, Reynolds sayısı 1'den çok daha büyük. Bu durumda akış artık tamamen laminer değil, geçiş bölgesinde. Sürükleme katsayısı da artık sabit değil, Reynolds sayısıyla değişir."
     }
   },
   {
@@ -169,7 +169,7 @@ const questions = [
       tr: "**Stokes Yasası** düşük Reynolds sayılı akış için kullanılır (Re < 1).\n\n2 mm küre için:\n$$Re = 0.94 < 1$$\n\nBu nedenle **Stokes Yasası** uygulanır:\n$$V_t = \\frac{gD^2(\\rho_s - \\rho_f)}{18\\mu}$$\n\n**Neden Newton Yasası değil?**\nNewton Yasası daha yüksek Re gerektirir (tipik olarak Re > 1000).\n\n**Cevap: Stokes Yasası** ✓"
     },
     narration: {
-      tr: "Bu soruda 2 mm kürenin terminal hızını hesaplamak için hangi yasanın kullanılacağını soruyor. Düşük Reynolds sayısı (0.94) laminer akış koşullarını gösterir ve bu durumda Stokes Yasası geçerlidir."
+      tr: "Bu soruda hangi yasayı kullanmamız gerektiğini bulacağız. Soruda bize Reynolds sayısı verilmiş: Re = 0.94. Bu değer 1'den küçük. Şimdi ne anlama geliyor? Akışkanlar mekaniğinde kritik bir kural vardır: Eğer Reynolds sayısı 1'den küçükse, yani viskoz kuvvetler atalet kuvvetlerine göre baskınsa, Stokes yasasını kullanmalıyız. Bu soruda kürenin çapı sadece 2 milimetre ve yağın viskozitesi yüksek. Bu koşullar altında küre çok yavaş hareket eder ve Stokes yasası geçerlidir. Newton yasası ise genellikle Re değeri 1000'den büyük olduğunda kullanılır."
     }
   },
   {
@@ -188,7 +188,7 @@ const questions = [
       tr: "**Çözüm:**\n\nVerilenler:\n- $D = 0.002$ m, $\\rho_s = 8000$ kg/m³\n- $\\rho_f = 900$ kg/m³, $\\mu = 0.1$ Pa·s\n\nTerminal hızda sürükleme kuvveti batık ağırlığa eşittir:\n$$F_D = W' = 2.92 \\times 10^{-4} \\text{ N}$$\n\n**Cevap: $F_D \\approx 0.005$ N**"
     },
     narration: {
-      tr: "Bu soruda terminal hızda sürükleme kuvvetini hesaplıyoruz. Terminal hızda sürükleme kuvveti batık ağırlığa eşittir. Önce kürenin özelliklerini, sonra kaldırma kuvvetini ve batık ağırlığı hesaplarız."
+      tr: "Bu soruda terminal hızda sürükleme kuvvetini hesaplayacağız. Terminal hızda cisim artık hızlanmıyor. Bu ne anlama geliyor? Cisim üzerine etkiyen tüm kuvvetler dengede demektir. Küre üzerine üç kuvvet etki eder: ağırlığı, kaldırma kuvveti ve sürükleme kuvveti. Ağırlık aşağı yönde, kaldırma kuvveti yukarı yönde. Bunların farkına batık ağırlık diyoruz. Terminal hızda sürükleme kuvveti bu batık ağırlığa eşittir. Önce kürenin hacmini ve kütlesini hesaplar, sonra kaldırma kuvvetini buluruz. Batık ağırlığı bulduğumuzda, işte o sürükleme kuvvetine eşittir."
     }
   },
   {
@@ -207,7 +207,7 @@ const questions = [
       tr: "**Çözüm:**\n\nVerilenler:\n- $D = 0.02$ m, $\\rho_s = 8000$ kg/m³\n- $\\rho_f = 900$ kg/m³\n\nTerminal hızda:\n$$F_D = W' = 0.292 \\text{ N}$$\n\nSürükleme formülü ile:\n$$F_D \\approx 0.05 \\text{ N}$$"
     },
     narration: {
-      tr: "Bu soruda daha büyük küre için sürükleme kuvvetini hesaplıyoruz. Büyük kürenin kütlesi ve dolayısıyla sürükleme kuvveti de daha büyük olur."
+      tr: "Şimdi daha büyük bir küre için sürükleme kuvvetini hesaplayacağız. Önceki soruda küçük küre vardı, şimdi çap 10 katına çıkmış. Bu durumda hacim 1000 kat artar, kütle de 1000 kat artar. Büyük küre daha ağır olduğu için, tabii ki sürükleme kuvveti de çok daha büyük olacak. Hesaplayalım: Önce kürenin hacmini, sonra kütlesini buluruz. Yağın kaldırma kuvvetini hesaplarız. Ağırlıktan kaldırma kuvvetini çıkararak batık ağırlığı buluruz. Terminal hızda sürükleme kuvveti bu batık ağırlığa eşittir. Gördüğümüz gibi, sonuç önceki sorudakinden çok daha büyük çıkıyor."
     }
   },
   {
@@ -226,7 +226,7 @@ const questions = [
       tr: "**Stokes Yasası:**\n\nDüşük Reynolds sayısında küreye etkiyen sürükleme kuvveti:\n$$F_D = 3\\pi \\mu D V_t$$\n\n**Hesaplama:**\n- $D = 0.002$ m, $\\mu = 0.1$ Pa·s, $V_t = 0.052$ m/s\n\n$$F_D = 3 \\times \\pi \\times 0.1 \\times 0.002 \\times 0.052 = 9.8 \\times 10^{-5} \\text{ N}$$\n\n**Cevap: $F_D \\approx 9.8 \\times 10^{-5}$ N**"
     },
     narration: {
-      tr: "Bu soruda Stokes yasasını kullanarak sürükleme kuvvetini hesaplıyoruz. Stokes yasası düşük Reynolds sayısında geçerlidir ve sürükleme kuvveti viskozite, çap ve hız ile doğru orantılıdır."
+      tr: "Stokes yasası, akışkanlar mekaniğinin en temel kavramlarından biridir. Bu soruda Stokes yasasını kullanarak sürükleme kuvvetini hesaplayacağız. Stokes yasası, düşük Reynolds sayısında, yani viskoz kuvvetlerin baskın olduğu durumlarda geçerlidir. Formül: F_D = 3 × π × μ × D × V_t. Bu formülde μ dinamik viskozite, D kürenin çapı, V_t terminal hızıdır. Formülden görüldüğü gibi, sürükleme kuvveti viskoziteyle, çapla ve hızla doğru orantılıdır. Bu formülü kullanarak verilen değerleri yerine koyar ve sürükleme kuvvetini buluruz."
     }
   }
 ];
